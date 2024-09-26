@@ -8,6 +8,5 @@
 
 - name: import playbook
   ansible.builtin.import_playbook: rhel9_remediacion.yml
-  tags:
-    - {{ encuesta_tags }}
+  tag: "{{ encuesta_tags }}"
 
