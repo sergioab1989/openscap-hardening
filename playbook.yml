@@ -2,6 +2,9 @@
 - name: Hardening con openscap
   hosts: all
   tasks:
+    - name: Playbook remediacion
+      debug:
+        msg: ejecución playbook
 
-  - name: import playbook
-    ansible.builtin.import_playbook: rhel9_remediacion.yml
+- name: import playbook
+  ansible.builtin.import_playbook: rhel9_remediacion.yml
