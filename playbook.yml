@@ -4,4 +4,4 @@
   tasks:
 
   - name: import playbook
-    import_playbook: rhel9_remediacion.yml
+    ansible.builtin.import_playbook: rhel9_remediacion.yml
