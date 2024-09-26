@@ -1,0 +1,7 @@
+---
+- name: Hardening con openscap
+  hosts: all
+  tasks:
+
+  - name: import playbook
+    import_playbook: rhel9_remediacion.yml
