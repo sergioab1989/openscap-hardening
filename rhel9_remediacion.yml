@@ -54,377 +54,373 @@
     var_auditd_flush: !!str incremental_async
     var_auditd_name_format: !!str hostname
   tasks:
+    - name: Check to see the current status of FIPS mode
+      command: /usr/bin/fips-mode-setup --check
+      register: is_fips_enabled
+      changed_when: false
+      failed_when: false
+      when: ( ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman",
+        "container"] and not ( lookup("env", "container") == "bwrap-osbuild" ) )
+      tags:
+      - CCE-86547-7
+      - DISA-STIG-RHEL-09-671010
+      - NIST-800-53-CM-6(a)
+      - NIST-800-53-IA-7
+      - NIST-800-53-SC-12
+      - NIST-800-53-SC-12(2)
+      - NIST-800-53-SC-12(3)
+      - NIST-800-53-SC-13
+      - enable_dracut_fips_module
+      - high_severity
+      - medium_complexity
+      - medium_disruption
+      - reboot_required
+      - restrict_strategy
 
-    - name: imprime host
-      debug:
-        msg: "{{ ansible_hostname }}"
-    # - name: Check to see the current status of FIPS mode
-    #   command: /usr/bin/fips-mode-setup --check
-    #   register: is_fips_enabled
-    #   changed_when: false
-    #   failed_when: false
-    #   when: ( ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman",
-    #     "container"] and not ( lookup("env", "container") == "bwrap-osbuild" ) )
-    #   tags:
-    #   - CCE-86547-7
-    #   - DISA-STIG-RHEL-09-671010
-    #   - NIST-800-53-CM-6(a)
-    #   - NIST-800-53-IA-7
-    #   - NIST-800-53-SC-12
-    #   - NIST-800-53-SC-12(2)
-    #   - NIST-800-53-SC-12(3)
-    #   - NIST-800-53-SC-13
-    #   - enable_dracut_fips_module
-    #   - high_severity
-    #   - medium_complexity
-    #   - medium_disruption
-    #   - reboot_required
-    #   - restrict_strategy
+    - name: Enable FIPS mode
+      command: /usr/bin/fips-mode-setup --enable
+      when:
+      - ( ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+        and not ( lookup("env", "container") == "bwrap-osbuild" ) )
+      - is_fips_enabled.stdout.find('FIPS mode is enabled.') == -1
+      tags:
+      - CCE-86547-7
+      - DISA-STIG-RHEL-09-671010
+      - NIST-800-53-CM-6(a)
+      - NIST-800-53-IA-7
+      - NIST-800-53-SC-12
+      - NIST-800-53-SC-12(2)
+      - NIST-800-53-SC-12(3)
+      - NIST-800-53-SC-13
+      - enable_dracut_fips_module
+      - high_severity
+      - medium_complexity
+      - medium_disruption
+      - reboot_required
+      - restrict_strategy
 
-    # - name: Enable FIPS mode
-    #   command: /usr/bin/fips-mode-setup --enable
-    #   when:
-    #   - ( ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
-    #     and not ( lookup("env", "container") == "bwrap-osbuild" ) )
-    #   - is_fips_enabled.stdout.find('FIPS mode is enabled.') == -1
-    #   tags:
-    #   - CCE-86547-7
-    #   - DISA-STIG-RHEL-09-671010
-    #   - NIST-800-53-CM-6(a)
-    #   - NIST-800-53-IA-7
-    #   - NIST-800-53-SC-12
-    #   - NIST-800-53-SC-12(2)
-    #   - NIST-800-53-SC-12(3)
-    #   - NIST-800-53-SC-13
-    #   - enable_dracut_fips_module
-    #   - high_severity
-    #   - medium_complexity
-    #   - medium_disruption
-    #   - reboot_required
-    #   - restrict_strategy
-
-    # - name: Enable Dracut FIPS Module
-    #   lineinfile:
-    #     path: /etc/dracut.conf.d/40-fips.conf
-    #     line: add_dracutmodules+=" fips "
-    #   when: ( ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman",
-    #     "container"] and not ( lookup("env", "container") == "bwrap-osbuild" ) )
-    #   tags:
-    #   - CCE-86547-7
-    #   - DISA-STIG-RHEL-09-671010
-    #   - NIST-800-53-CM-6(a)
-    #   - NIST-800-53-IA-7
-    #   - NIST-800-53-SC-12
-    #   - NIST-800-53-SC-12(2)
-    #   - NIST-800-53-SC-12(3)
-    #   - NIST-800-53-SC-13
-    #   - enable_dracut_fips_module
-    #   - high_severity
-    #   - medium_complexity
-    #   - medium_disruption
-    #   - reboot_required
-    #   - restrict_strategy
+    - name: Enable Dracut FIPS Module
+      lineinfile:
+        path: /etc/dracut.conf.d/40-fips.conf
+        line: add_dracutmodules+=" fips "
+      when: ( ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman",
+        "container"] and not ( lookup("env", "container") == "bwrap-osbuild" ) )
+      tags:
+      - CCE-86547-7
+      - DISA-STIG-RHEL-09-671010
+      - NIST-800-53-CM-6(a)
+      - NIST-800-53-IA-7
+      - NIST-800-53-SC-12
+      - NIST-800-53-SC-12(2)
+      - NIST-800-53-SC-12(3)
+      - NIST-800-53-SC-13
+      - enable_dracut_fips_module
+      - high_severity
+      - medium_complexity
+      - medium_disruption
+      - reboot_required
+      - restrict_strategy
 
 
 
 
 
-    # - name: Enable FIPS Mode - Check to See the Current Status of FIPS Mode
-    #   ansible.builtin.command: /usr/bin/fips-mode-setup --check
-    #   register: is_fips_enabled
-    #   failed_when: false
-    #   changed_when: false
-    #   when:
-    #   - ( ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
-    #     and not ( lookup("env", "container") == "bwrap-osbuild" ) )
-    #   - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
-    #   tags:
-    #   - CCE-88742-2
-    #   - DISA-STIG-RHEL-09-671010
-    #   - NIST-800-53-CM-3(6)
-    #   - NIST-800-53-CM-6(a)
-    #   - NIST-800-53-IA-7
-    #   - NIST-800-53-SC-12
-    #   - NIST-800-53-SC-12(2)
-    #   - NIST-800-53-SC-12(3)
-    #   - NIST-800-53-SC-13
-    #   - enable_fips_mode
-    #   - high_severity
-    #   - medium_complexity
-    #   - medium_disruption
-    #   - reboot_required
-    #   - restrict_strategy
+    - name: Enable FIPS Mode - Check to See the Current Status of FIPS Mode
+      ansible.builtin.command: /usr/bin/fips-mode-setup --check
+      register: is_fips_enabled
+      failed_when: false
+      changed_when: false
+      when:
+      - ( ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+        and not ( lookup("env", "container") == "bwrap-osbuild" ) )
+      - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+      tags:
+      - CCE-88742-2
+      - DISA-STIG-RHEL-09-671010
+      - NIST-800-53-CM-3(6)
+      - NIST-800-53-CM-6(a)
+      - NIST-800-53-IA-7
+      - NIST-800-53-SC-12
+      - NIST-800-53-SC-12(2)
+      - NIST-800-53-SC-12(3)
+      - NIST-800-53-SC-13
+      - enable_fips_mode
+      - high_severity
+      - medium_complexity
+      - medium_disruption
+      - reboot_required
+      - restrict_strategy
 
-    # - name: Enable FIPS Mode - Enable FIPS Mode
-    #   ansible.builtin.command: /usr/bin/fips-mode-setup --enable
-    #   when:
-    #   - ( ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
-    #     and not ( lookup("env", "container") == "bwrap-osbuild" ) )
-    #   - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
-    #   - is_fips_enabled.stdout.find('FIPS mode is enabled.') == -1
-    #   tags:
-    #   - CCE-88742-2
-    #   - DISA-STIG-RHEL-09-671010
-    #   - NIST-800-53-CM-3(6)
-    #   - NIST-800-53-CM-6(a)
-    #   - NIST-800-53-IA-7
-    #   - NIST-800-53-SC-12
-    #   - NIST-800-53-SC-12(2)
-    #   - NIST-800-53-SC-12(3)
-    #   - NIST-800-53-SC-13
-    #   - enable_fips_mode
-    #   - high_severity
-    #   - medium_complexity
-    #   - medium_disruption
-    #   - reboot_required
-    #   - restrict_strategy
+    - name: Enable FIPS Mode - Enable FIPS Mode
+      ansible.builtin.command: /usr/bin/fips-mode-setup --enable
+      when:
+      - ( ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+        and not ( lookup("env", "container") == "bwrap-osbuild" ) )
+      - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+      - is_fips_enabled.stdout.find('FIPS mode is enabled.') == -1
+      tags:
+      - CCE-88742-2
+      - DISA-STIG-RHEL-09-671010
+      - NIST-800-53-CM-3(6)
+      - NIST-800-53-CM-6(a)
+      - NIST-800-53-IA-7
+      - NIST-800-53-SC-12
+      - NIST-800-53-SC-12(2)
+      - NIST-800-53-SC-12(3)
+      - NIST-800-53-SC-13
+      - enable_fips_mode
+      - high_severity
+      - medium_complexity
+      - medium_disruption
+      - reboot_required
+      - restrict_strategy
 
-    # - name: Enable FIPS Mode - Configure Crypto Policy
-    #   ansible.builtin.lineinfile:
-    #     path: /etc/crypto-policies/config
-    #     regexp: ^(?!#)(\S+)$
-    #     line: '{{ var_system_crypto_policy }}'
-    #     create: true
-    #   when:
-    #   - ( ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
-    #     and not ( lookup("env", "container") == "bwrap-osbuild" ) )
-    #   - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
-    #   tags:
-    #   - CCE-88742-2
-    #   - DISA-STIG-RHEL-09-671010
-    #   - NIST-800-53-CM-3(6)
-    #   - NIST-800-53-CM-6(a)
-    #   - NIST-800-53-IA-7
-    #   - NIST-800-53-SC-12
-    #   - NIST-800-53-SC-12(2)
-    #   - NIST-800-53-SC-12(3)
-    #   - NIST-800-53-SC-13
-    #   - enable_fips_mode
-    #   - high_severity
-    #   - medium_complexity
-    #   - medium_disruption
-    #   - reboot_required
-    #   - restrict_strategy
+    - name: Enable FIPS Mode - Configure Crypto Policy
+      ansible.builtin.lineinfile:
+        path: /etc/crypto-policies/config
+        regexp: ^(?!#)(\S+)$
+        line: '{{ var_system_crypto_policy }}'
+        create: true
+      when:
+      - ( ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+        and not ( lookup("env", "container") == "bwrap-osbuild" ) )
+      - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+      tags:
+      - CCE-88742-2
+      - DISA-STIG-RHEL-09-671010
+      - NIST-800-53-CM-3(6)
+      - NIST-800-53-CM-6(a)
+      - NIST-800-53-IA-7
+      - NIST-800-53-SC-12
+      - NIST-800-53-SC-12(2)
+      - NIST-800-53-SC-12(3)
+      - NIST-800-53-SC-13
+      - enable_fips_mode
+      - high_severity
+      - medium_complexity
+      - medium_disruption
+      - reboot_required
+      - restrict_strategy
 
-    # - name: Enable FIPS Mode - Verify that Crypto Policy is Set (runtime)
-    #   ansible.builtin.command: /usr/bin/update-crypto-policies --set {{ var_system_crypto_policy
-    #     }}
-    #   when:
-    #   - ( ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
-    #     and not ( lookup("env", "container") == "bwrap-osbuild" ) )
-    #   - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
-    #   tags:
-    #   - CCE-88742-2
-    #   - DISA-STIG-RHEL-09-671010
-    #   - NIST-800-53-CM-3(6)
-    #   - NIST-800-53-CM-6(a)
-    #   - NIST-800-53-IA-7
-    #   - NIST-800-53-SC-12
-    #   - NIST-800-53-SC-12(2)
-    #   - NIST-800-53-SC-12(3)
-    #   - NIST-800-53-SC-13
-    #   - enable_fips_mode
-    #   - high_severity
-    #   - medium_complexity
-    #   - medium_disruption
-    #   - reboot_required
-    #   - restrict_strategy
-
-
-    # - name: Ensure crypto-policies is installed
-    #   package:
-    #     name: crypto-policies
-    #     state: present
-    #   tags:
-    #   - CCE-83442-4
-    #   - DISA-STIG-RHEL-09-672010
-    #   - enable_strategy
-    #   - low_complexity
-    #   - low_disruption
-    #   - medium_severity
-    #   - no_reboot_needed
-    #   - package_crypto-policies_installed
+    - name: Enable FIPS Mode - Verify that Crypto Policy is Set (runtime)
+      ansible.builtin.command: /usr/bin/update-crypto-policies --set {{ var_system_crypto_policy
+        }}
+      when:
+      - ( ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+        and not ( lookup("env", "container") == "bwrap-osbuild" ) )
+      - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+      tags:
+      - CCE-88742-2
+      - DISA-STIG-RHEL-09-671010
+      - NIST-800-53-CM-3(6)
+      - NIST-800-53-CM-6(a)
+      - NIST-800-53-IA-7
+      - NIST-800-53-SC-12
+      - NIST-800-53-SC-12(2)
+      - NIST-800-53-SC-12(3)
+      - NIST-800-53-SC-13
+      - enable_fips_mode
+      - high_severity
+      - medium_complexity
+      - medium_disruption
+      - reboot_required
+      - restrict_strategy
 
 
+    - name: Ensure crypto-policies is installed
+      package:
+        name: crypto-policies
+        state: present
+      tags:
+      - CCE-83442-4
+      - DISA-STIG-RHEL-09-672010
+      - enable_strategy
+      - low_complexity
+      - low_disruption
+      - medium_severity
+      - no_reboot_needed
+      - package_crypto-policies_installed
 
 
 
-    # - name: Configure System Cryptography Policy
-    #   lineinfile:
-    #     path: /etc/crypto-policies/config
-    #     regexp: ^(?!#)(\S+)$
-    #     line: '{{ var_system_crypto_policy }}'
-    #     create: true
-    #   tags:
-    #   - CCE-83450-7
-    #   - DISA-STIG-RHEL-09-671010
-    #   - DISA-STIG-RHEL-09-672030
-    #   - DISA-STIG-RHEL-09-672045
-    #   - NIST-800-53-AC-17(2)
-    #   - NIST-800-53-AC-17(a)
-    #   - NIST-800-53-CM-6(a)
-    #   - NIST-800-53-MA-4(6)
-    #   - NIST-800-53-SC-12(2)
-    #   - NIST-800-53-SC-12(3)
-    #   - NIST-800-53-SC-13
-    #   - PCI-DSSv4-2.2.7
-    #   - configure_crypto_policy
-    #   - high_severity
-    #   - low_complexity
-    #   - low_disruption
-    #   - no_reboot_needed
-    #   - restrict_strategy
-
-    # - name: Verify that Crypto Policy is Set (runtime)
-    #   command: /usr/bin/update-crypto-policies --set {{ var_system_crypto_policy }}
-    #   tags:
-    #   - CCE-83450-7
-    #   - DISA-STIG-RHEL-09-671010
-    #   - DISA-STIG-RHEL-09-672030
-    #   - DISA-STIG-RHEL-09-672045
-    #   - NIST-800-53-AC-17(2)
-    #   - NIST-800-53-AC-17(a)
-    #   - NIST-800-53-CM-6(a)
-    #   - NIST-800-53-MA-4(6)
-    #   - NIST-800-53-SC-12(2)
-    #   - NIST-800-53-SC-12(3)
-    #   - NIST-800-53-SC-13
-    #   - PCI-DSSv4-2.2.7
-    #   - configure_crypto_policy
-    #   - high_severity
-    #   - low_complexity
-    #   - low_disruption
-    #   - no_reboot_needed
-    #   - restrict_strategy
 
 
-    # - name: Configure OpenSSL library to use System Crypto Policy - Search for crypto_policy
-    #     Section
-    #   ansible.builtin.find:
-    #     paths: /etc/pki/tls
-    #     patterns: openssl.cnf
-    #     contains: ^\s*\[\s*crypto_policy\s*]
-    #   register: test_crypto_policy_group
-    #   tags:
-    #   - CCE-83452-3
-    #   - DISA-STIG-RHEL-09-672035
-    #   - NIST-800-53-AC-17(2)
-    #   - NIST-800-53-AC-17(a)
-    #   - NIST-800-53-CM-6(a)
-    #   - NIST-800-53-MA-4(6)
-    #   - NIST-800-53-SC-12(2)
-    #   - NIST-800-53-SC-12(3)
-    #   - NIST-800-53-SC-13
-    #   - PCI-DSS-Req-2.2
-    #   - configure_openssl_crypto_policy
-    #   - low_complexity
-    #   - medium_disruption
-    #   - medium_severity
-    #   - no_reboot_needed
-    #   - unknown_strategy
+    - name: Configure System Cryptography Policy
+      lineinfile:
+        path: /etc/crypto-policies/config
+        regexp: ^(?!#)(\S+)$
+        line: '{{ var_system_crypto_policy }}'
+        create: true
+      tags:
+      - CCE-83450-7
+      - DISA-STIG-RHEL-09-671010
+      - DISA-STIG-RHEL-09-672030
+      - DISA-STIG-RHEL-09-672045
+      - NIST-800-53-AC-17(2)
+      - NIST-800-53-AC-17(a)
+      - NIST-800-53-CM-6(a)
+      - NIST-800-53-MA-4(6)
+      - NIST-800-53-SC-12(2)
+      - NIST-800-53-SC-12(3)
+      - NIST-800-53-SC-13
+      - PCI-DSSv4-2.2.7
+      - configure_crypto_policy
+      - high_severity
+      - low_complexity
+      - low_disruption
+      - no_reboot_needed
+      - restrict_strategy
 
-    # - name: Configure OpenSSL library to use System Crypto Policy - Search for crypto_policy
-    #     Section Together With .include Directive
-    #   ansible.builtin.find:
-    #     paths: /etc/pki/tls
-    #     patterns: openssl.cnf
-    #     contains: ^\s*\.include\s*(?:=\s*)?/etc/crypto-policies/back-ends/opensslcnf.config$
-    #   register: test_crypto_policy_include_directive
-    #   tags:
-    #   - CCE-83452-3
-    #   - DISA-STIG-RHEL-09-672035
-    #   - NIST-800-53-AC-17(2)
-    #   - NIST-800-53-AC-17(a)
-    #   - NIST-800-53-CM-6(a)
-    #   - NIST-800-53-MA-4(6)
-    #   - NIST-800-53-SC-12(2)
-    #   - NIST-800-53-SC-12(3)
-    #   - NIST-800-53-SC-13
-    #   - PCI-DSS-Req-2.2
-    #   - configure_openssl_crypto_policy
-    #   - low_complexity
-    #   - medium_disruption
-    #   - medium_severity
-    #   - no_reboot_needed
-    #   - unknown_strategy
-
-    # - name: Configure OpenSSL library to use System Crypto Policy - Add .include Line
-    #     for opensslcnf.config File in crypto_policy Section
-    #   ansible.builtin.lineinfile:
-    #     create: true
-    #     insertafter: ^\s*\[\s*crypto_policy\s*]\s*
-    #     line: .include = /etc/crypto-policies/back-ends/opensslcnf.config
-    #     path: /etc/pki/tls/openssl.cnf
-    #   when:
-    #   - test_crypto_policy_group.matched > 0
-    #   - test_crypto_policy_include_directive.matched == 0
-    #   tags:
-    #   - CCE-83452-3
-    #   - DISA-STIG-RHEL-09-672035
-    #   - NIST-800-53-AC-17(2)
-    #   - NIST-800-53-AC-17(a)
-    #   - NIST-800-53-CM-6(a)
-    #   - NIST-800-53-MA-4(6)
-    #   - NIST-800-53-SC-12(2)
-    #   - NIST-800-53-SC-12(3)
-    #   - NIST-800-53-SC-13
-    #   - PCI-DSS-Req-2.2
-    #   - configure_openssl_crypto_policy
-    #   - low_complexity
-    #   - medium_disruption
-    #   - medium_severity
-    #   - no_reboot_needed
-    #   - unknown_strategy
-
-    # - name: Configure OpenSSL library to use System Crypto Policy - Add crypto_policy
-    #     Section With .include for opensslcnf.config File
-    #   ansible.builtin.lineinfile:
-    #     create: true
-    #     line: |-
-    #       [crypto_policy]
-    #       .include = /etc/crypto-policies/back-ends/opensslcnf.config
-    #     path: /etc/pki/tls/openssl.cnf
-    #   when: test_crypto_policy_group.matched == 0
-    #   tags:
-    #   - CCE-83452-3
-    #   - DISA-STIG-RHEL-09-672035
-    #   - NIST-800-53-AC-17(2)
-    #   - NIST-800-53-AC-17(a)
-    #   - NIST-800-53-CM-6(a)
-    #   - NIST-800-53-MA-4(6)
-    #   - NIST-800-53-SC-12(2)
-    #   - NIST-800-53-SC-12(3)
-    #   - NIST-800-53-SC-13
-    #   - PCI-DSS-Req-2.2
-    #   - configure_openssl_crypto_policy
-    #   - low_complexity
-    #   - medium_disruption
-    #   - medium_severity
-    #   - no_reboot_needed
-    #   - unknown_strategy
+    - name: Verify that Crypto Policy is Set (runtime)
+      command: /usr/bin/update-crypto-policies --set {{ var_system_crypto_policy }}
+      tags:
+      - CCE-83450-7
+      - DISA-STIG-RHEL-09-671010
+      - DISA-STIG-RHEL-09-672030
+      - DISA-STIG-RHEL-09-672045
+      - NIST-800-53-AC-17(2)
+      - NIST-800-53-AC-17(a)
+      - NIST-800-53-CM-6(a)
+      - NIST-800-53-MA-4(6)
+      - NIST-800-53-SC-12(2)
+      - NIST-800-53-SC-12(3)
+      - NIST-800-53-SC-13
+      - PCI-DSSv4-2.2.7
+      - configure_crypto_policy
+      - high_severity
+      - low_complexity
+      - low_disruption
+      - no_reboot_needed
+      - restrict_strategy
 
 
-    # - name: Configure SSH to use System Crypto Policy
-    #   lineinfile:
-    #     dest: /etc/sysconfig/sshd
-    #     state: absent
-    #     regexp: (?i)^\s*CRYPTO_POLICY.*$
-    #   tags:
-    #   - CCE-83445-7
-    #   - DISA-STIG-RHEL-09-255055
-    #   - NIST-800-53-AC-17(2)
-    #   - NIST-800-53-AC-17(a)
-    #   - NIST-800-53-CM-6(a)
-    #   - NIST-800-53-MA-4(6)
-    #   - NIST-800-53-SC-13
-    #   - PCI-DSS-Req-2.2
-    #   - PCI-DSSv4-2.2.7
-    #   - configure_ssh_crypto_policy
-    #   - disable_strategy
-    #   - low_complexity
-    #   - medium_disruption
-    #   - medium_severity
-    #   - reboot_required
+    - name: Configure OpenSSL library to use System Crypto Policy - Search for crypto_policy
+        Section
+      ansible.builtin.find:
+        paths: /etc/pki/tls
+        patterns: openssl.cnf
+        contains: ^\s*\[\s*crypto_policy\s*]
+      register: test_crypto_policy_group
+      tags:
+      - CCE-83452-3
+      - DISA-STIG-RHEL-09-672035
+      - NIST-800-53-AC-17(2)
+      - NIST-800-53-AC-17(a)
+      - NIST-800-53-CM-6(a)
+      - NIST-800-53-MA-4(6)
+      - NIST-800-53-SC-12(2)
+      - NIST-800-53-SC-12(3)
+      - NIST-800-53-SC-13
+      - PCI-DSS-Req-2.2
+      - configure_openssl_crypto_policy
+      - low_complexity
+      - medium_disruption
+      - medium_severity
+      - no_reboot_needed
+      - unknown_strategy
+
+    - name: Configure OpenSSL library to use System Crypto Policy - Search for crypto_policy
+        Section Together With .include Directive
+      ansible.builtin.find:
+        paths: /etc/pki/tls
+        patterns: openssl.cnf
+        contains: ^\s*\.include\s*(?:=\s*)?/etc/crypto-policies/back-ends/opensslcnf.config$
+      register: test_crypto_policy_include_directive
+      tags:
+      - CCE-83452-3
+      - DISA-STIG-RHEL-09-672035
+      - NIST-800-53-AC-17(2)
+      - NIST-800-53-AC-17(a)
+      - NIST-800-53-CM-6(a)
+      - NIST-800-53-MA-4(6)
+      - NIST-800-53-SC-12(2)
+      - NIST-800-53-SC-12(3)
+      - NIST-800-53-SC-13
+      - PCI-DSS-Req-2.2
+      - configure_openssl_crypto_policy
+      - low_complexity
+      - medium_disruption
+      - medium_severity
+      - no_reboot_needed
+      - unknown_strategy
+
+    - name: Configure OpenSSL library to use System Crypto Policy - Add .include Line
+        for opensslcnf.config File in crypto_policy Section
+      ansible.builtin.lineinfile:
+        create: true
+        insertafter: ^\s*\[\s*crypto_policy\s*]\s*
+        line: .include = /etc/crypto-policies/back-ends/opensslcnf.config
+        path: /etc/pki/tls/openssl.cnf
+      when:
+      - test_crypto_policy_group.matched > 0
+      - test_crypto_policy_include_directive.matched == 0
+      tags:
+      - CCE-83452-3
+      - DISA-STIG-RHEL-09-672035
+      - NIST-800-53-AC-17(2)
+      - NIST-800-53-AC-17(a)
+      - NIST-800-53-CM-6(a)
+      - NIST-800-53-MA-4(6)
+      - NIST-800-53-SC-12(2)
+      - NIST-800-53-SC-12(3)
+      - NIST-800-53-SC-13
+      - PCI-DSS-Req-2.2
+      - configure_openssl_crypto_policy
+      - low_complexity
+      - medium_disruption
+      - medium_severity
+      - no_reboot_needed
+      - unknown_strategy
+
+    - name: Configure OpenSSL library to use System Crypto Policy - Add crypto_policy
+        Section With .include for opensslcnf.config File
+      ansible.builtin.lineinfile:
+        create: true
+        line: |-
+          [crypto_policy]
+          .include = /etc/crypto-policies/back-ends/opensslcnf.config
+        path: /etc/pki/tls/openssl.cnf
+      when: test_crypto_policy_group.matched == 0
+      tags:
+      - CCE-83452-3
+      - DISA-STIG-RHEL-09-672035
+      - NIST-800-53-AC-17(2)
+      - NIST-800-53-AC-17(a)
+      - NIST-800-53-CM-6(a)
+      - NIST-800-53-MA-4(6)
+      - NIST-800-53-SC-12(2)
+      - NIST-800-53-SC-12(3)
+      - NIST-800-53-SC-13
+      - PCI-DSS-Req-2.2
+      - configure_openssl_crypto_policy
+      - low_complexity
+      - medium_disruption
+      - medium_severity
+      - no_reboot_needed
+      - unknown_strategy
+
+
+    - name: Configure SSH to use System Crypto Policy
+      lineinfile:
+        dest: /etc/sysconfig/sshd
+        state: absent
+        regexp: (?i)^\s*CRYPTO_POLICY.*$
+      tags:
+      - CCE-83445-7
+      - DISA-STIG-RHEL-09-255055
+      - NIST-800-53-AC-17(2)
+      - NIST-800-53-AC-17(a)
+      - NIST-800-53-CM-6(a)
+      - NIST-800-53-MA-4(6)
+      - NIST-800-53-SC-13
+      - PCI-DSS-Req-2.2
+      - PCI-DSSv4-2.2.7
+      - configure_ssh_crypto_policy
+      - disable_strategy
+      - low_complexity
+      - medium_disruption
+      - medium_severity
+      - reboot_required
 
 
     # - name: Ensure sudo is installed
