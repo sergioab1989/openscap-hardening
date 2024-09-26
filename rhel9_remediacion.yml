@@ -121,10 +121,6 @@
       - reboot_required
       - restrict_strategy
 
-
-
-
-
     - name: Enable FIPS Mode - Check to See the Current Status of FIPS Mode
       ansible.builtin.command: /usr/bin/fips-mode-setup --check
       register: is_fips_enabled
