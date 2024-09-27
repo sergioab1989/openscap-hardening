@@ -50,18 +50,18 @@
         flat: yes
       become: yes
 
-    # - name: import playbook
-    #   ansible.builtin.import_playbook: rhel9_remediacion{{ inventory_hostname }}.yml
+    - name: import playbook
+      ansible.builtin.import_playbook: rhel9_remediacion{{ inventory_hostname }}.yml
 
 
-    - name: validacion de directiorio de ejecución
-      shell: ls -l *;pwd
-      register: dir_output
-      delegate_to: localhost
+    # - name: validacion de directiorio de ejecución
+    #   shell: ls -l *;pwd
+    #   register: dir_output
+    #   delegate_to: localhost
 
-    - name: validacion de directiorio de ejecución
-      debug:
-        var: dir_output
+    # - name: validacion de directiorio de ejecución
+    #   debug:
+    #     var: dir_output
 
 
 
