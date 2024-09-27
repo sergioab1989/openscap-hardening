@@ -50,8 +50,8 @@
         flat: yes
       become: yes
 
-    - name: import playbook
-      ansible.builtin.import_playbook: rhel9_remediacion.yml
+- name: import playbook
+  ansible.builtin.import_playbook: rhel9_remediacion.yml
 
     # - name: validacion de directiorio de ejecución
     #   shell: ls -l *;pwd
