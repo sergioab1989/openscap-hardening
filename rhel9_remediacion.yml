@@ -92,7 +92,7 @@
       - NIST-800-53-SC-12(2)
       - NIST-800-53-SC-12(3)
       - NIST-800-53-SC-13
-      - enable_dracut_fips_module
+      - enable_dracut_fips_module 
       - high_severity
       - medium_complexity
       - medium_disruption
@@ -199,8 +199,7 @@
       - restrict_strategy
 
     - name: Enable FIPS Mode - Verify that Crypto Policy is Set (runtime)
-      ansible.builtin.command: /usr/bin/update-crypto-policies --set {{ var_system_crypto_policy
-        }}
+      ansible.builtin.command: /usr/bin/update-crypto-policies --set {{ var_system_crypto_policy }}
       when:
       - ( ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
         and not ( lookup("env", "container") == "bwrap-osbuild" ) )

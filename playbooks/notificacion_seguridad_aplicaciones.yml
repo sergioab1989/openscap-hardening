@@ -1,0 +1,6 @@
+---
+- name: envio de notificacion
+  hosts: localhost
+  gather_facts: false   
+  roles:
+    - notificacion_seguridad_aplicaciones

@@ -1,0 +1,18 @@
+---
+- name: habilitacion de puertos http RHEL8
+  ansible.builtin.include_tasks: rhel8/rhel8_firewall_http.yml
+
+- name: habilitacion de puertos oracle RHEL8
+  ansible.builtin.include_tasks: rhel8/rhel8_firewall_oracle.yml
+
+- name: habilitacion de puertos sap RHEL8
+  ansible.builtin.include_tasks: rhel8/rhel8_firewall_sap.yml
+
+- name: habilitacion de puertos sial lobo RHEL8
+  ansible.builtin.include_tasks: rhel8/rhel8_firewall_sial_lobo.yml
+
+- name: habilitacion de puertos weblogic RHEL8
+  ansible.builtin.include_tasks: rhel8/rhel8_firewall_weblogic.yml
+
+- name: recoleccion de datos 
+  ansible.builtin.include_tasks: rhel8/rhel8_recoleccion_informacion.yml

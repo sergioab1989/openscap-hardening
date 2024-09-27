@@ -1,0 +1,27 @@
+---
+- name: Obtener la fecha y hora actual
+  ansible.builtin.set_fact:
+    current_datetime: "{{ lookup('pipe', 'date +%Y%m%d%H%M%S') }}"
+
+- name: recoleccion de informacion para notificacion
+  ansible.builtin.set_fact: 
+    rhel9_recoleccion: |
+      {% if rhel9_recoleccion is defined and rhel9_recoleccion != "" %}         
+          {{ rhel9_recoleccion }}                    
+      {% endif %}
+
+      Archivo openscap : /usr/share/xml/scap/ssg/content/ssg-rhel9-ds.xml
+      Perfil utilizado : xccdf_org.ssgproject.content_profile_cis_server_l1
+
+      {{ "Host escaneado:    " + inventory_hostname }}
+      {{ "Direccion IP  :    " + ansible_host }}
+
+      Vulnerabilidades encontradas en escaneo de openscap
+      ---------------------------------------------------------------------
+      Vulnerabilidades por remediar : {{ fail_count }}
+      Vulnerabilidades remediadas   : {{ pass_count }}
+
+      Para mayor informacion consultar archivo html openscap
+      ---------------------------------------------------------------------
+      Repositorio Bitbuket : http://172.27.213.17:17990/projects/ANSIBLE/repos/reportes_openscap_servidores_rhel/browse/{{ inventory_hostname }}/rhel9_reforzamiento_{{ inventory_hostname }}_{{ current_datetime }}.html
+ 

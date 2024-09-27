@@ -1,0 +1,129 @@
+sap_abap:
+  - 3200/tcp
+  - 3601/tcp
+  - 22/tcp
+  - 1521/tcp
+  - 8000/tcp
+  - 44300/tcp
+  - 25/tcp
+  - 3900/tcp
+  - 3901/tcp
+  - 3301/tcp
+  - 8101/tcp
+  - 1128/tcp
+  - 3201/tcp
+  - 3300/tcp
+  - 8101/tcp
+
+sap_java:
+  - 50000/tcp
+  - 50004/tcp
+  - 3901/tcp
+  - 50007/tcp
+  - 3201/tcp
+  - 50008/tcp
+  - 22/tcp
+  - 25/tcp
+  - 1521/tcp
+  - 50013/tcp
+  - 50113/tcp
+  - 1128/tcp
+
+weblogic_1:
+  - 7001/tcp
+  - 7003/tcp
+  - 7004/tcp
+  - 7005/tcp
+  - 5557/tcp
+
+weblogic_2: 
+  - 7003/tcp
+  - 7004/tcp
+  - 7005/tcp
+  - 5557/tcp
+
+weblogic_3:
+  - 8080/tcp
+  - 443/tcp
+  - 7001/tcp
+  - 7002/tcp
+
+http_puertos:
+  - 22/tcp
+  - 25/tcp
+  - 389/tcp
+  - 1523/tcp
+  - 443/tcp
+  - 80/tcp
+
+http_mysql:
+  - 80/tcp
+  - 8080/tcp
+  - 443/tcp
+
+http_puertos_2:
+  - 7777/tcp
+  - 5556/tcp
+
+http_mysql_2:
+  - 443/tcp
+  - 80/tcp
+  - 3301/tcp
+  - 3306/tcp
+  - 8080/tcp
+  - 53/tcp
+  - 9002/tcp
+  - 5986/tcp
+  - 8443/tcp
+  - 21/tcp
+
+sial_lobo:
+  - 7001/tcp
+  - 7003/tcp
+  - 80/tcp
+  - 443/tcp
+  - 7005/tcp
+  - 80/tcp
+  - 443/tcp
+
+openshift_1:
+  - 22/tcp
+  - 25/tcp
+  - 80/tcp
+  - 88/tcp
+  - 1523/tcp
+  - 389/tcp
+  - 443/tcp
+  - 464/tcp
+  - 636/tcp
+  - 17990/tcp
+  - 18080/tcp
+  - 18081/tcp
+  - 18083/tcp
+  - 19000/tcp
+  - 6443/tcp
+  - 7060/tcp
+  - 7061/tcp
+  - 7062/tcp
+  - 7063/tcp
+  - 7064/tcp
+  - 7065/tcp
+  - 7066/tcp
+  - 7067/tcp
+  - 7068/tcp
+  - 7069/tcp
+  - 7070/tcp
+  - 8443/tcp
+
+openshift_2:
+  - 22/tcp
+  - 25/tcp
+  - 389/tcp
+  - 1523/tcp
+  - 443/tcp
+  - 80/tcp
+
+oracle_db:
+  - 1523/tcp
+  - 3872/tcp
+  - 22/tcp

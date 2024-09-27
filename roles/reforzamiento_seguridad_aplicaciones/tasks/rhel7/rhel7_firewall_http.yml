@@ -1,0 +1,80 @@
+---
+- name: Habilitar puertos para servicios HTTP (22, 25, 389, 1523, 443, 80)
+  block:
+  - name: Agregando puerto al Firewall para HTTP (Apache) RHEL7
+    ansible.posix.firewalld:
+      port: "{{ item }}"
+      permanent: true
+      state: enabled 
+    loop: "{{ http_puertos }}"
+
+  - name: Habilitando Firewall de RHEL7
+    ansible.builtin.service:
+      name: firewalld
+      enabled: yes
+
+  - name: Recargar firewall de RHEL7 
+    ansible.builtin.service:
+      name: firewalld
+      state: reloaded
+  when: aplicativo == "HTTP_22/25/389/1523/443/80"
+
+- name: Habilitar puertos para servicios HTTP y MYSQL (80,  8080, 443)
+  block:
+  - name: Agregando puerto al Firewall para HTTP y MYSQL RHEL7
+    ansible.posix.firewalld:
+      port: "{{ item }}"
+      permanent: true
+      state: enabled 
+    loop: "{{ http_mysql }}"
+
+  - name: Habilitando Firewall de RHEL7
+    ansible.builtin.service:
+      name: firewalld
+      enabled: yes
+
+  - name: Recargar firewall de RHEL7 
+    ansible.builtin.service:
+      name: firewalld
+      state: reloaded
+  when: aplicativo == "HTTP_MYSQL_80/8080/443"
+
+- name: Habilitar puertos para servicios HTTP (7777, 5556)
+  block:
+  - name: Agregando puerto al Firewall para HTTP RHEL7
+    ansible.posix.firewalld:
+      port: "{{ item }}"
+      permanent: true
+      state: enabled 
+    loop: "{{ http_puertos_2 }}"
+
+  - name: Habilitando Firewall de RHEL7
+    ansible.builtin.service:
+      name: firewalld
+      enabled: yes
+
+  - name: Recargar firewall de RHEL7 
+    ansible.builtin.service:
+      name: firewalld
+      state: reloaded
+  when: aplicativo == "HTTP_7777/5556"
+
+- name: Habilitar puertos para servicios HTTP y MYSQL (443,80,3301,3306,8080,53,9002,5986, 8443,21)
+  block:
+  - name: Agregando puerto al Firewall para HTTP/MYSQL RHEL7
+    ansible.posix.firewalld:
+      port: "{{ item }}"
+      permanent: true
+      state: enabled 
+    loop: "{{ http_mysql_2 }}"
+
+  - name: Habilitando Firewall de RHEL7
+    ansible.builtin.service:
+      name: firewalld
+      enabled: yes
+
+  - name: Recargar firewall de RHEL7 
+    ansible.builtin.service:
+      name: firewalld
+      state: reloaded
+  when: aplicativo == "HTTP_MYSQL_443/80/3301/3306/8080/53/9002/5986/8443/21"

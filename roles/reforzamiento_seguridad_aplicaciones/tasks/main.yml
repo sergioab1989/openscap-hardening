@@ -1,0 +1,15 @@
+---
+- name: Validacion de version de sistema operativo
+  ansible.builtin.include_tasks: validar_version_os.yml
+  
+- name: subproceso de reforzamiento RHEL7
+  ansible.builtin.include_tasks: rhel7_mitigacion_app.yml
+  when: version  == "RHEL7"
+
+- name: subproceso de reforzamiento RHEL8
+  ansible.builtin.include_tasks: rhel8_mitigacion_app.yml
+  when: version  == "RHEL8"
+  
+- name: subproceso de reforzamiento RHEL9
+  ansible.builtin.include_tasks: rhel9_mitigacion_app.yml
+  when: version  == "RHEL9"

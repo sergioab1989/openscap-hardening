@@ -1,0 +1,24 @@
+---
+- name: extraer informacion de la version
+  ansible.builtin.command: "cat /etc/os-release"
+  register: os_release
+
+- name: asignando lista de /etc/os-release a una variable
+  ansible.builtin.set_fact:
+    os_file: "{{ os_release.stdout_lines }}" 
+
+- name: Validar version de sistema operativo se pertenece a RHEL7
+  ansible.builtin.set_fact:
+    version: "RHEL7"
+  when: os_file | select('search', '^VERSION_ID="7') | list
+
+- name: Validar version de sistema operativo se pertenece a RHEL8
+  ansible.builtin.set_fact:
+    version: "RHEL8"
+  when: os_file | select('search', '^VERSION_ID="8') | list
+
+- name: Validar version de sistema operativo se pertenece a RHEL9
+  ansible.builtin.set_fact:
+    version: "RHEL9"
+  when: os_file | select('search', '^VERSION_ID="9') | list
+

@@ -1,0 +1,18 @@
+---
+- name: Clonando repositorio Bitbucket en entorno de ejecucion 
+  hosts: localhost
+  gather_facts: false   
+  roles:
+    - bitbucket_login
+
+- name: Escaneo de vulnerabilidades
+  hosts: all
+  gather_facts: false   
+  roles:
+    - reforzamiento_seguridad
+
+- name: subiendo cambio y cerrando conexion a bitbucket
+  hosts: localhost
+  gather_facts: false   
+  roles:
+    - bitbucket_cerrar

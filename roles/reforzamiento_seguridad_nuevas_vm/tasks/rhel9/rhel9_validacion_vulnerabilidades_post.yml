@@ -1,0 +1,39 @@
+---
+- name: Eliminar líneas vacías
+  ansible.builtin.set_fact:
+    rhel9_info_openscap: "{{ rhel_9_reforzamiento_postremediacion.stdout_lines | select('match', '^.+$') | select('match', '^((?!--- Starting Evaluation ---|^$).)*$') | map('trim') | list }}"
+
+- name: Reiniciar grouped_results
+  ansible.builtin.set_fact:
+    grouped_results: []
+
+- name: Agrupar datos en bloques
+  ansible.builtin.set_fact:
+    grouped_results: >-
+      {{
+        grouped_results | default([]) +
+        [{
+          'Title': rhel9_info_openscap[item+1] | trim,
+          'Rule': rhel9_info_openscap[item+3] | trim,
+          'Ident': rhel9_info_openscap[item+5] | trim,
+          'Result': rhel9_info_openscap[item+7] | trim
+        }]
+      }}
+  loop: "{{ range(0, rhel9_info_openscap | length, 8) }}"
+  when: rhel9_info_openscap[item:item+8] | length == 8
+
+- name: Filtrar resultados 'fail'
+  ansible.builtin.set_fact:
+    fail_results_rhel9: "{{ grouped_results | selectattr('Result', 'equalto', 'fail') | list }}"
+
+- name: Filtrar resultados 'pass'
+  ansible.builtin.set_fact:
+    pass_results_rhel9: "{{ grouped_results | selectattr('Result', 'equalto', 'pass') | list }}"
+
+- name: Contar grupos 'fail'
+  set_fact:
+    fail_count: "{{ fail_results_rhel9 | length }}"
+
+- name: Contar grupos 'pass'
+  set_fact:
+    pass_count: "{{ pass_results_rhel9 | length }}"

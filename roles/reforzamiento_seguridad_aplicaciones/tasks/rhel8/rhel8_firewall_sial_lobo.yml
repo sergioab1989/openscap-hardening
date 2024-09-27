@@ -1,0 +1,20 @@
+---
+- name: Habilitar puertos para servicios Sial Lobo (7001, 7003, 80, 443, 7005, 80, 443)
+  block:
+  - name: Agregando puerto al Firewall para Sial Lobo RHEL8
+    ansible.posix.firewalld:
+      port: "{{ item }}"
+      permanent: true
+      state: enabled 
+    loop: "{{ sial_lobo }}"
+
+  - name: Habilitando Firewall de RHEL8
+    ansible.builtin.service:
+      name: firewalld
+      enabled: yes
+
+  - name: Recargar firewall de RHEL8 
+    ansible.builtin.service:
+      name: firewalld
+      state: reloaded
+  when: aplicativo == "SIAL_LOBO_7001/7003/80/443/7005/80/443"

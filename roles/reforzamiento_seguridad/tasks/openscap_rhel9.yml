@@ -1,0 +1,105 @@
+---
+- name: Instalacion de OpenScap scanner - security-guide - utils
+  ansible.builtin.yum:
+    name:
+      - openscap
+      - openscap-utils
+      - scap-security-guide
+    state: latest
+
+- name: Crear subdirectorio si no existe
+  ansible.builtin.file:
+    path: /root/rhel9_openscap_result
+    state: directory
+
+- name: Creandp reporte OpenScap RHEL8
+  ansible.builtin.command: oscap xccdf eval \
+    --profile xccdf_org.ssgproject.content_profile_cis_server_l1 \
+    --results-arf /root/rhel9_openscap_result/rhel9_reforzamiento_{{ inventory_hostname }}.xml \
+    --report /root/rhel9_openscap_result/rhel9_reforzamiento_{{ inventory_hostname }}.html \
+    /usr/share/xml/scap/ssg/content/ssg-rhel9-ds.xml
+  register: rhel_9_informe_reforzamiento
+  ignore_errors: true
+
+- name: Eliminar líneas vacías
+  ansible.builtin.set_fact:
+    rhel9_info_openscap: "{{ rhel_9_informe_reforzamiento.stdout_lines | select('match', '^.+$') | select('match', '^((?!--- Starting Evaluation ---|^$).)*$') | map('trim') | list }}"
+
+- name: Agrupar datos en bloques
+  ansible.builtin.set_fact:
+    grouped_results: >-
+      {{
+        grouped_results | default([]) +
+        [{
+          'Title': rhel9_info_openscap[item+1] | trim,
+          'Rule': rhel9_info_openscap[item+3] | trim,
+          'Ident': rhel9_info_openscap[item+5] | trim,
+          'Result': rhel9_info_openscap[item+7] | trim
+        }]
+      }}
+  loop: "{{ range(0, rhel9_info_openscap | length, 8) }}"
+  when: rhel9_info_openscap[item:item+8] | length == 8
+
+- name: Filtrar resultados 'fail'
+  ansible.builtin.set_fact:
+    fail_results_rhel9: "{{ grouped_results | selectattr('Result', 'equalto', 'fail') | list }}"
+
+- name: Filtrar resultados 'pass'
+  ansible.builtin.set_fact:
+    pass_results_rhel9: "{{ grouped_results | selectattr('Result', 'equalto', 'pass') | list }}"
+
+- name: Contar grupos 'fail'
+  set_fact:
+    fail_count: "{{ fail_results_rhel9 | length }}"
+
+- name: Contar grupos 'pass'
+  set_fact:
+    pass_count: "{{ pass_results_rhel9 | length }}"
+
+- name: Obtener la fecha y hora actual
+  ansible.builtin.set_fact:
+    current_datetime: "{{ lookup('pipe', 'date +%Y%m%d%H%M%S') }}"
+
+- name: recoleccion de informacion para notificacion
+  ansible.builtin.set_fact: 
+    rhel9_recoleccion: |
+      {% if rhel9_recoleccion is defined and rhel9_recoleccion != "" %}         
+          {{ rhel9_recoleccion }}                    
+      {% endif %}
+
+      Archivo openscap : /usr/share/xml/scap/ssg/content/ssg-rhel9-ds.xml
+      Perfil utilizado : xccdf_org.ssgproject.content_profile_cis_server_l1
+
+      {{ "Host escaneado:    " + inventory_hostname }}
+      {{ "Direccion IP  :    " + ansible_host }}
+
+      Vulnerabilidades encontradas en escaneo de openscap
+      ---------------------------------------------------------------------
+      Vulnerabilidades por remediar : {{ fail_count }}
+      Vulnerabilidades remediadas   : {{ pass_count }}
+
+      Para mayor informacion consultar archivo html openscap
+      ---------------------------------------------------------------------
+      Repositorio Bitbuket : http://172.27.213.17:17990/projects/ANSIBLE/repos/reportes_openscap_servidores_rhel/browse/{{ inventory_hostname }}/rhel9_reforzamiento_{{ inventory_hostname }}_{{ current_datetime }}.html
+
+- name: Crear subdirectorio si no existe
+  ansible.builtin.file:
+    path: /reportes_openscap_servidores_rhel/{{ inventory_hostname }}
+    state: directory
+  delegate_to: localhost
+
+- name: copiar archivo html a local EE
+  ansible.builtin.fetch:
+    src: /root/rhel9_openscap_result/rhel9_reforzamiento_{{ inventory_hostname }}.html
+    dest: /reportes_openscap_servidores_rhel/{{ inventory_hostname }}/
+    flat: yes
+  become: yes
+
+- name: cambiar nombre de archivo
+  ansible.builtin.shell: "mv /reportes_openscap_servidores_rhel/{{ inventory_hostname }}/rhel9_reforzamiento_{{ inventory_hostname }}.html /reportes_openscap_servidores_rhel/{{ inventory_hostname }}/rhel9_reforzamiento_{{ inventory_hostname }}_{{ current_datetime }}.html"
+  delegate_to: localhost
+
+- name: Paso de variable RHEL9
+  ansible.builtin.set_stats:
+    data:
+      rhel9_recoleccion_info: "{{ rhel9_recoleccion }}"

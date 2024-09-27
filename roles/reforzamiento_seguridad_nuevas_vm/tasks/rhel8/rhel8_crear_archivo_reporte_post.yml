@@ -1,0 +1,8 @@
+---
+- name: Creando reporte OpenScap RHEL8
+  ansible.builtin.command: oscap xccdf eval \
+    --profile xccdf_org.ssgproject.content_profile_cis_server_l1 \    
+    --report /root/rhel8_openscap_result/rhel8_reforzamiento_postremediacion_{{ inventory_hostname }}.html \
+    /usr/share/xml/scap/ssg/content/ssg-rhel8-ds.xml
+  register: rhel_8_reforzamiento_postremediacion
+  ignore_errors: true

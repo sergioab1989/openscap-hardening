@@ -1,0 +1,60 @@
+---
+- name: Habilitar puertos para servicios WebLogic (7003, 7004, 7005, 5557)
+  block:
+  - name: Agregando puerto al Firewall para WebLogic RHEL7
+    ansible.posix.firewalld:
+      port: "{{ item }}"
+      permanent: true
+      state: enabled 
+    loop: "{{ weblogic_2 }}"
+
+  - name: Habilitando Firewall de RHEL7
+    ansible.builtin.service:
+      name: firewalld
+      enabled: yes
+
+  - name: Recargar firewall de RHEL7 
+    ansible.builtin.service:
+      name: firewalld
+      state: reloaded
+  when: aplicativo == "WEBLOGIC_7003/7004/7005/5557"
+
+- name: Habilitar puertos para servicios WebLogic (7001, 7003, 7004, 7005, 5557)
+  block:
+  - name: Agregando puerto al Firewall para WebLogic RHEL7
+    ansible.posix.firewalld:
+      port: "{{ item }}"
+      permanent: true
+      state: enabled 
+    loop: "{{ weblogic_1 }}"
+
+  - name: Habilitando Firewall de RHEL7
+    ansible.builtin.service:
+      name: firewalld
+      enabled: yes
+
+  - name: Recargar firewall de RHEL7 
+    ansible.builtin.service:
+      name: firewalld
+      state: reloaded
+  when: aplicativo == "WEBLOGIC_7001/7003/7004/7005/5557"
+
+- name: Habilitar puertos para servicios WebLogic (8080, 443, 7001, 7002)
+  block:
+  - name: Agregando puerto al Firewall para WebLogic RHEL7
+    ansible.posix.firewalld:
+      port: "{{ item }}"
+      permanent: true
+      state: enabled 
+    loop: "{{ weblogic_3 }}"
+
+  - name: Habilitando Firewall de RHEL7
+    ansible.builtin.service:
+      name: firewalld
+      enabled: yes
+
+  - name: Recargar firewall de RHEL7 
+    ansible.builtin.service:
+      name: firewalld
+      state: reloaded
+  when: aplicativo == "WEBLOGIC_8080/443/7001/7002"

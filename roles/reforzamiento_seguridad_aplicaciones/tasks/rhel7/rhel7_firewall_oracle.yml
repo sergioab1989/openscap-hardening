@@ -1,0 +1,20 @@
+---
+- name: Habilitar puertos para servicios Oracle (1523, 3872, 22)
+  block:
+  - name: Agregando puerto al Firewall para Oracle RHEL8
+    ansible.posix.firewalld:
+      port: "{{ item }}"
+      permanent: true
+      state: enabled 
+    loop: "{{ oracle_db }}"
+
+  - name: Habilitando Firewall de RHEL8
+    ansible.builtin.service:
+      name: firewalld
+      enabled: yes
+
+  - name: Recargar firewall de RHEL8 
+    ansible.builtin.service:
+      name: firewalld
+      state: reloaded
+  when: aplicativo == "ORACLE_1523/3872/22"

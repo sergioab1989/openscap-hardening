@@ -1,0 +1,40 @@
+---
+- name: SAP ABAP
+  block:
+  - name: Agregando puerto al Firewall para ABAP RHEL8
+    ansible.posix.firewalld:
+      port: "{{ item }}"
+      permanent: true
+      state: enabled 
+    loop: "{{ sap_abap }}"
+
+  - name: Habilitando Firewall de RHEL8
+    ansible.builtin.service:
+      name: firewalld
+      enabled: yes
+
+  - name: Recargar firewall de RHEL8 
+    ansible.builtin.service:
+      name: firewalld
+      state: reloaded
+  when: aplicativo == "SAP_ABAP"
+  
+- name: SAP JAVA
+  block:
+  - name: Agregando puerto al Firewall para ABAP RHEL8
+    ansible.posix.firewalld:
+      port: "{{ item }}"
+      permanent: true
+      state: enabled 
+    loop: "{{ sap_java }}"
+
+  - name: Habilitando Firewall de RHEL8
+    ansible.builtin.service:
+      name: firewalld
+      enabled: yes
+
+  - name: Recargar firewall de RHEL8 
+    ansible.builtin.service:
+      name: firewalld
+      state: reloaded
+  when: aplicativo == "SAP_JAVA"

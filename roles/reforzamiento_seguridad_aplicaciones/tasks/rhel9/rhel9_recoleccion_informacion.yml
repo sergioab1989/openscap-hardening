@@ -1,0 +1,130 @@
+---
+- name: recoleccion de informacion para notificacion
+  ansible.builtin.set_fact: 
+    rhel9_recoleccion_aplicaciones: |
+      {% if rhel9_recoleccion_aplicaciones is defined and rhel9_recoleccion_aplicaciones != "" %}         
+          {{ rhel9_recoleccion_aplicaciones }}                              
+      {% endif %}
+
+      {{ "Host escaneado:    " + inventory_hostname }}
+      {{ "Direccion IP  :    " + ansible_host }}
+
+      {% if aplicativo == "SAP_ABAP" %}
+        Puertos habilitados para SAP ABAP: 
+        - 3200/tcp
+        - 3601/tcp
+        - 22/tcp
+        - 1521/tcp
+        - 8000/tcp
+        - 44300/tcp
+        - 25/tcp
+        - 3900/tcp
+        - 3901/tcp
+        - 3301/tcp
+        - 8101/tcp
+        - 1128/tcp
+        - 3201/tcp
+        - 3300/tcp
+        - 8101/tcp
+      {% endif %}
+
+      {% if aplicativo == "SAP_JAVA" %}
+        Puertos habilitados para SAP JAVA: 
+        - 50000/tcp
+        - 50004/tcp
+        - 3901/tcp
+        - 50007/tcp
+        - 3201/tcp
+        - 50008/tcp
+        - 22/tcp
+        - 25/tcp
+        - 1521/tcp
+        - 50013/tcp
+        - 50113/tcp
+        - 1128/tcp
+      {% endif %}
+
+      {% if aplicativo == "HTTP_22/25/389/1523/443/80" %}
+        Puertos habilitados para Apache: 
+        - 22/tcp
+        - 25/tcp
+        - 389/tcp
+        - 1523/tcp
+        - 443/tcp
+        - 80/tcp
+      {% endif %}
+
+      {% if aplicativo == "HTTP_MYSQL_80/8080/443" %}
+        Puertos habilitados para Apache/MYSQL: 
+        - 80/tcp
+        - 8080/tcp
+        - 443/tcp
+      {% endif %}
+
+      {% if aplicativo == "HTTP_7777/5556" %}
+        Puertos habilitados para Apache: 
+        - 7777/tcp
+        - 5556/tcp
+      {% endif %}
+
+      {% if aplicativo == "HTTP_MYSQL_443/80/3301/3306/8080/53/9002/5986/8443/21" %}
+        Puertos habilitados para Apache: 
+        - 443/tcp
+        - 80/tcp
+        - 3301/tcp
+        - 3306/tcp
+        - 8080/tcp
+        - 53/tcp
+        - 9002/tcp
+        - 5986/tcp
+        - 8443/tcp
+        - 21/tcp
+      {% endif %}
+
+      {% if aplicativo == "WEBLOGIC_7003/7004/7005/5557" %}
+        Puertos habilitados para WEBLOGIC: 
+        - 7003/tcp
+        - 7004/tcp
+        - 7005/tcp
+        - 5557/tcp
+      {% endif %}
+
+      {% if aplicativo == "WEBLOGIC_7001/7003/7004/7005/5557" %}
+        Puertos habilitados para WEBLOGIC: 
+        - 7001/tcp
+        - 7003/tcp
+        - 7004/tcp
+        - 7005/tcp
+        - 5557/tcp
+      {% endif %}
+
+      {% if aplicativo == "WEBLOGIC_8080/443/7001/7002" %}
+        Puertos habilitados para WEBLOGIC: 
+        - 8080/tcp
+        - 443/tcp
+        - 7001/tcp
+        - 7002/tcp
+      {% endif %}
+
+      {% if aplicativo == "SIAL_LOBO_7001/7003/80/443/7005/80/443" %}
+        Puertos habilitados para SIAL LOBO: 
+        - 7001/tcp
+        - 7003/tcp
+        - 80/tcp
+        - 443/tcp
+        - 7005/tcp
+        - 80/tcp
+        - 443/tcp
+      {% endif %}
+
+      {% if aplicativo == "ORACLE_1523/3872/22" %}
+        Puertos habilitados para ORACLE: 
+        - 1523/tcp
+        - 3872/tcp
+        - 22/tcp
+      {% endif %}
+
+- name: Paso de variables 
+  ansible.builtin.set_stats:
+    data:
+      rhel9_recoleccion_aplicaciones_info: "{{ rhel9_recoleccion_aplicaciones }}"

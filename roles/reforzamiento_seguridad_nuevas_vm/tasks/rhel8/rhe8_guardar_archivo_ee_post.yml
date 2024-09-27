@@ -1,0 +1,15 @@
+---
+- name: Obtener la fecha y hora actual
+  ansible.builtin.set_fact:
+    current_datetime: "{{ lookup('pipe', 'date +%Y%m%d%H%M%S') }}"
+    
+- name: copiar archivo html a local EE
+  ansible.builtin.fetch:
+    src: /root/rhel8_openscap_result/rhel8_reforzamiento_postremediacion_{{ inventory_hostname }}.html
+    dest: /reportes_openscap_servidores_rhel/{{ inventory_hostname }}/
+    flat: yes
+  become: yes
+
+- name: cambiar nombre de archivo
+  ansible.builtin.shell: "mv /reportes_openscap_servidores_rhel/{{ inventory_hostname }}/rhel8_reforzamiento_postremediacion_{{ inventory_hostname }}.html /reportes_openscap_servidores_rhel/{{ inventory_hostname }}/rhel8_reforzamiento_postremediacion_{{ inventory_hostname }}_{{ current_datetime }}.html"
+  delegate_to: localhost

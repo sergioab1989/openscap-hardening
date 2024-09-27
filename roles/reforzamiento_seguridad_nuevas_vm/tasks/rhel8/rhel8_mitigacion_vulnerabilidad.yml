@@ -1,0 +1,7 @@
+---
+- name: create bash remediation FIX SH RHEL8
+  command: bash -c "sudo oscap xccdf generate fix --fix-type bash --profile ospp --output /root/rhel8_openscap_result/rhel8_remediacion.sh /root/rhel8_openscap_result/rhel8_reforzamiento_{{ inventory_hostname }}.xml"
+
+- name: Aplicando remediaciones de seguridad de RHEL8 a traves de Shell Script
+  ignore_errors: true
+  ansible.builtin.command: bash -c '/root/rhel8_openscap_result/rhel8_remediacion.sh'

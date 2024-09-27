@@ -1,0 +1,58 @@
+---
+- name: cuerpo de correo notificacion
+  ansible.builtin.set_fact:
+    body_notificacion: |
+      Ansible Automation Platform Habilitacion de Firewall Local
+
+      Informe de habilitacion de puerto en Firewall Local
+            
+      {% if rhel7_recoleccion_aplicaciones_info is defined and rhel7_recoleccion_aplicaciones_info != "" %}         
+          {{ rhel7_recoleccion_aplicaciones_info }}                    
+      {% endif %}
+
+      {% if rhel8_recoleccion_aplicaciones_info is defined and rhel8_recoleccion_aplicaciones_info != "" %}         
+          {{ rhel8_recoleccion_aplicaciones_info }}                    
+      {% endif %}
+
+      {% if rhel9_recoleccion_aplicaciones_info is defined and rhel9_recoleccion_aplicaciones_info != "" %}         
+          {{ rhel9_recoleccion_aplicaciones_info }}                    
+      {% endif %}
+
+- name: Envio notificacion
+  ansible.builtin.uri:
+    url: https://172.27.92.35/api/v2/notification_templates/4/
+    headers:
+      Authorization: 'Basic YWRtaW46QW4kMWJsM18yMDI0X0JuMA=='              
+    status_code: [200, 201]
+    method: PUT
+    body_format: json
+    body: {
+          "name": "reforzamiento de seguridad por aplicacion",
+          "description": "",
+          "organization": 1,
+          "notification_type": "email",
+          "notification_configuration": {
+              "host": "BNOPEXNODB01.banobras.gob.mx",
+              "port": 25,
+              "sender": "ansible.servicio@banobras.gob.mx",
+              "timeout": 5,
+              "use_ssl": false,
+              "use_tls": false,
+              "password": "$encrypted$",
+              "username": "",
+              "recipients": [
+                  "carlos.riverae@banobras.gob.mx",
+                  "vladimir.herrera@banobras.gob.mx",
+                  "ope_banobras_linux@b-drive.com.mx",
+                  "amhed.zapata@banobras.gob.mx"
+              ]
+          }, 
+          "messages": {                    
+              "success": {
+                  "message": "informe de escaneo de vulnerabilidades AAP {{ tower_job_template_name }} Id Job# {{ tower_job_id }}",
+                  "body": " {{ body_notificacion }} " 
+              },                    
+          }
+          }
+    validate_certs: no
+  delegate_to: localhost
