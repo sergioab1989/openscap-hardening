@@ -1,15 +1,16 @@
 ---
 - name: Hardening con openscap
   hosts: all
+  gather_facts: false 
   tasks:
 
     - name: validacion de directiorio de ejecución
-      shell: ls -l *
+      shell: ls -l *;pwd
       register: dir_output
 
     - name: validacion de directiorio de ejecución
       debug:
-        var: "{{ dir_output }}"
+        var: dir_output
 
 
 
