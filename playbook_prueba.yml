@@ -17,7 +17,7 @@
         flat: yes
       become: yes
 
-    - name: Heredar variable de host donde no esta activa db
+    - name: Heredar variable 
       ansible.builtin.set_stats:
         data:      
           host_play: "/runner/project/rhel9_remediacion_{{ inventory_hostname }}.yml"
