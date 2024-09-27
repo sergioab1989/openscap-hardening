@@ -14,7 +14,7 @@
         dest: /root/rhel9_openscap_result/rhel9_remediacion_{{ inventory_hostname }}_vars.yml
         content: |
           {% set inside_vars = false %}
-          {% for line in playbook_content.content | b64decode | splitlines %}
+          {% for line in (playbook_content.content | b64decode).split('\n') %}
             {% if 'vars:' in line %}
               {% set inside_vars = true %}
             {% elif 'tasks:' in line %}
