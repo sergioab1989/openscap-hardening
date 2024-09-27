@@ -6,28 +6,24 @@
 
     - name: Cambiar valor de hosts en el playbook YAML
       ansible.builtin.lineinfile:
-        path: /root/rhel9_openscap_result/rhel9_remediacion.yml
+        path: /root/rhel9_openscap_result/rhel9_remediacion_{{ inventory_hostname }}.yml
         regexp: '^.*hosts: (.*)$'
         line: '- hosts: {{ inventory_hostname }}'
 
     - name: copiar archivo remediation a local EE
       ansible.builtin.fetch:
-        src: /root/rhel9_openscap_result/rhel9_remediacion.yml
-        dest: /runner/project/rhel9_remediacion.yml
+        src: /root/rhel9_openscap_result/rhel9_remediacion_{{ inventory_hostname }}.yml
+        dest: /runner/project/rhel9_remediacion_{{ inventory_hostname }}.yml
         flat: yes
       become: yes
 
-    # - name: Incluir tareas del playbook de remediación
-    #   ansible.builtin.include_tasks:
-    #     file: "/runner/project/rhel9_remediacion.yml"
-
-
-#     - name: Guardar el nombre del playbook para su importación
-#       set_fact:
-#         playbook_remediation: "/runner/project/rhel9_remediacion{{ inventory_hostname }}.yml"
+    - name: Heredar variable de host donde no esta activa db
+      ansible.builtin.set_stats:
+        data:      
+          host_play: "/runner/project/rhel9_remediacion_{{ inventory_hostname }}.yml"
 
 - name: import playbook
-  ansible.builtin.import_playbook: rhel9_remediacion.yml
+  ansible.builtin.import_playbook: "{{ host_play }}"
 
 
     # - name: Instalacion de OpenScap scanner - security-guide - utils
