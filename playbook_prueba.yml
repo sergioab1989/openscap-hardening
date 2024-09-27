@@ -51,7 +51,7 @@
       become: yes
 
     - name: import playbook
-      ansible.builtin.import_playbook: /runner/project/rhel9_remediacion{{ inventory_hostname }}.yml
+      ansible.builtin.import_playbook: rhel9_remediacion{{ inventory_hostname }}.yml
 
 
     # - name: validacion de directiorio de ejecución
