@@ -46,12 +46,12 @@
     - name: copiar archivo remediation a local EE
       ansible.builtin.fetch:
         src: /root/rhel9_openscap_result/rhel9_remediacion{{ inventory_hostname }}.yml
-        dest: /runner/project/rhel9_remediacion.yml
+        dest: /runner/project/rhel9_remediacion{{ inventory_hostname }}.yml
         flat: yes
       become: yes
 
 - name: import playbook
-  ansible.builtin.import_playbook: rhel9_remediacion.yml
+  ansible.builtin.import_playbook: rhel9_remediacion{{ inventory_hostname }}.yml
 
     # - name: validacion de directiorio de ejecución
     #   shell: ls -l *;pwd
