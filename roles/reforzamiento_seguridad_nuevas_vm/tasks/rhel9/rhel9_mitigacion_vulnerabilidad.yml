@@ -2,6 +2,12 @@
 - name: create bash remediation FIX SH RHEL9
   command: bash -c "sudo oscap xccdf generate fix --fix-type bash --profile ospp --output /root/rhel9_openscap_result/rhel9_remediacion.sh /root/rhel9_openscap_result/rhel9_reforzamiento_{{ inventory_hostname }}.xml"
 
-- name: Aplicando remediaciones de seguridad de RHEL9 a traves de Shell Script
-  ignore_errors: true
-  ansible.builtin.command: bash -c '/root/rhel9_openscap_result/rhel9_remediacion.sh'
+- name: create ansible remediation FIX playbook RHEL9
+  command: bash -c "sudo oscap xccdf generate fix --fix-type ansible --profile ospp --output /root/rhel9_openscap_result/rhel9_remediacion.yml /root/rhel9_openscap_result/rhel9_reforzamiento_{{ inventory_hostname }}.xml"
+
+
+
+
+# - name: Aplicando remediaciones de seguridad de RHEL9 a traves de Shell Script
+#   ignore_errors: true
+#   ansible.builtin.command: bash -c '/root/rhel9_openscap_result/rhel9_remediacion.sh'
