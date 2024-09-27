@@ -1,7 +1,7 @@
 ---
 - name: Hardening con openscap
   hosts: all
-  gather_facts: false 
+  gather_facts: false
   tasks:
 
     - name: Cambiar valor de hosts en el playbook YAML
@@ -17,13 +17,17 @@
         flat: yes
       become: yes
 
-    - name: Heredar variable 
-      ansible.builtin.set_stats:
-        data:      
-          host_play: "/runner/project/rhel9_remediacion_{{ inventory_hostname }}.yml"
+    - name: Incluir tareas 
+        ansible.builtin.include_tasks:
+          file: /runner/project/rhel9_remediacion_{{ inventory_hostname }}.yml
 
-- name: import playbook
-  ansible.builtin.import_playbook: "{{ host_play }}"
+    # - name: Heredar variable 
+    #   ansible.builtin.set_stats:
+    #     data:      
+    #       host_play: "/runner/project/rhel9_remediacion_{{ inventory_hostname }}.yml"
+
+# - name: import playbook
+#   ansible.builtin.import_playbook: "{{ host_play }}"
 
 
     # - name: Instalacion de OpenScap scanner - security-guide - utils
