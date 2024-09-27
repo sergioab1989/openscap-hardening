@@ -4,22 +4,44 @@
   gather_facts: false
   tasks:
 
-    - name: Cambiar valor de hosts en el playbook YAML
-      ansible.builtin.lineinfile:
-        path: /root/rhel9_openscap_result/rhel9_remediacion_{{ inventory_hostname }}.yml
-        regexp: '^.*hosts: (.*)$'
-        line: '- hosts: {{ inventory_hostname }}'
-
-    - name: copiar archivo remediation a local EE
-      ansible.builtin.fetch:
+    - name: Leer el archivo del playbook
+      ansible.builtin.slurp:
         src: /root/rhel9_openscap_result/rhel9_remediacion_{{ inventory_hostname }}.yml
-        dest: /runner/project/rhel9_remediacion_{{ inventory_hostname }}.yml
-        flat: yes
-      become: yes
+      register: playbook_content
 
-    - name: Incluir tareas 
-      ansible.builtin.import_tasks:
-        file: "/runner/project/rhel9_remediacion_{{ inventory_hostname }}.yml"
+    - name: Extraer solo las variables entre vars y tasks
+      ansible.builtin.copy:
+        dest: /root/rhel9_openscap_result/rhel9_remediacion_{{ inventory_hostname }}_vars.yml
+        content: |
+          {% set inside_vars = false %}
+          {% for line in playbook_content.content | b64decode | splitlines %}
+            {% if 'vars:' in line %}
+              {% set inside_vars = true %}
+            {% elif 'tasks:' in line %}
+              {% set inside_vars = false %}
+            {% endif %}
+            {% if inside_vars and ':' in line %}
+              {{ line }}
+            {% endif %}
+          {% endfor %}
+
+
+    # - name: Cambiar valor de hosts en el playbook YAML
+    #   ansible.builtin.lineinfile:
+    #     path: /root/rhel9_openscap_result/rhel9_remediacion_{{ inventory_hostname }}.yml
+    #     regexp: '^.*hosts: (.*)$'
+    #     line: '- hosts: {{ inventory_hostname }}'
+
+    # - name: copiar archivo remediation a local EE
+    #   ansible.builtin.fetch:
+    #     src: /root/rhel9_openscap_result/rhel9_remediacion_{{ inventory_hostname }}.yml
+    #     dest: /runner/project/rhel9_remediacion_{{ inventory_hostname }}.yml
+    #     flat: yes
+    #   become: yes
+
+    # - name: Incluir tareas 
+    #   ansible.builtin.import_tasks:
+    #     file: "/runner/project/rhel9_remediacion_{{ inventory_hostname }}.yml"
 
     # - name: Heredar variable 
     #   ansible.builtin.set_stats:
