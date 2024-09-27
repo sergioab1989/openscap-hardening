@@ -10,13 +10,18 @@
         dest: /runner/project/rhel9_remediacion{{ inventory_hostname }}.yml
         flat: yes
       become: yes
+      
+    - name: Incluir tareas del playbook de remediación
+      ansible.builtin.include_tasks:
+        file: "/runner/project/rhel9_remediacion{{ inventory_hostname }}.yml"
 
-    - name: Guardar el nombre del playbook para su importación
-      set_fact:
-        playbook_remediation: "/runner/project/rhel9_remediacion{{ inventory_hostname }}.yml"
 
-- name: import playbook
-  ansible.builtin.import_playbook: "{{ playbook_remediation }}"
+#     - name: Guardar el nombre del playbook para su importación
+#       set_fact:
+#         playbook_remediation: "/runner/project/rhel9_remediacion{{ inventory_hostname }}.yml"
+
+# - name: import playbook
+#   ansible.builtin.import_playbook: "{{ playbook_remediation }}"
 
 
     # - name: Instalacion de OpenScap scanner - security-guide - utils
