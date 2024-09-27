@@ -19,7 +19,7 @@
 
     - name: Incluir tareas 
         ansible.builtin.include_tasks:
-          file: /runner/project/rhel9_remediacion_{{ inventory_hostname }}.yml
+          file: "/runner/project/rhel9_remediacion_{{ inventory_hostname }}.yml"
 
     # - name: Heredar variable 
     #   ansible.builtin.set_stats:
