@@ -7,6 +7,7 @@
     - name: validacion de directiorio de ejecución
       shell: ls -l *;pwd
       register: dir_output
+      delegate_to: localhost
 
     - name: validacion de directiorio de ejecución
       debug:
