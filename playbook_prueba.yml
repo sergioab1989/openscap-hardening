@@ -4,16 +4,22 @@
   gather_facts: false 
   tasks:
 
+    - name: Cambiar valor de hosts en el playbook YAML
+      ansible.builtin.lineinfile:
+        path: /root/rhel9_openscap_result/rhel9_remediacion.yml
+        regexp: '^.*hosts: (.*)$'
+        line: '- hosts: {{ inventory_hostname }}'
+
     - name: copiar archivo remediation a local EE
       ansible.builtin.fetch:
-        src: /root/rhel9_openscap_result/rhel9_remediacion{{ inventory_hostname }}.yml
-        dest: /runner/project/rhel9_remediacion{{ inventory_hostname }}.yml
+        src: /root/rhel9_openscap_result/rhel9_remediacion.yml
+        dest: /runner/project/rhel9_remediacion.yml
         flat: yes
       become: yes
-      
+
     - name: Incluir tareas del playbook de remediación
       ansible.builtin.include_tasks:
-        file: "/runner/project/rhel9_remediacion{{ inventory_hostname }}.yml"
+        file: "/runner/project/rhel9_remediacion.yml"
 
 
 #     - name: Guardar el nombre del playbook para su importación
@@ -57,11 +63,7 @@
     # - name: create ansible remediation FIX playbook RHEL9
     #   command: bash -c "sudo oscap xccdf generate fix --fix-type ansible --profile ospp --output /root/rhel9_openscap_result/rhel9_remediacion{{ inventory_hostname }}.yml /root/rhel9_openscap_result/rhel9_reforzamiento_{{ inventory_hostname }}.xml"
 
-    # - name: Cambiar valor de hosts en el playbook YAML
-    #   ansible.builtin.lineinfile:
-    #     path: /root/rhel9_openscap_result/rhel9_remediacion{{ inventory_hostname }}.yml
-    #     regexp: '^.*hosts: (.*)$'
-    #     line: '- hosts: {{ inventory_hostname }}'
+
 
 
     # - name: validacion de directiorio de ejecución
