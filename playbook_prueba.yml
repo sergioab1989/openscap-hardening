@@ -51,6 +51,8 @@
       become: yes
 
 - name: import playbook
+  hosts: all
+  gather_facts: false   
   ansible.builtin.import_playbook: rhel9_remediacion{{ inventory_hostname }}.yml
 
     # - name: validacion de directiorio de ejecución
