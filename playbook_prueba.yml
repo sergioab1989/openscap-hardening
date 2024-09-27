@@ -40,8 +40,8 @@
     - name: Cambiar valor de hosts en el playbook YAML
       ansible.builtin.lineinfile:
         path: /root/rhel9_openscap_result/rhel9_remediacion{{ inventory_hostname }}.yml
-        regexp: '^hosts:.*'
-        line: 'hosts: {{ inventory_hostname }}'
+        regexp: '^.*hosts: (.*)$'
+        line: '- hosts: {{ inventory_hostname }}'
 
     - name: copiar archivo remediation a local EE
       ansible.builtin.fetch:
