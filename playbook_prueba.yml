@@ -4,6 +4,46 @@
   gather_facts: false 
   tasks:
 
+    - name: Instalacion de OpenScap scanner - security-guide - utils
+      ansible.builtin.yum:
+        name:
+          - openscap
+          - openscap-utils
+          - scap-security-guide
+        state: latest
+
+    - name: Crear subdirectorio si no existe
+      ansible.builtin.file:
+        path: /root/rhel9_openscap_result
+        state: directory
+
+    - name: Bloque para obtención de reporte OpenScap
+      block:
+        - name: Creando reporte OpenScap RHEL9
+          ansible.builtin.command: oscap xccdf eval \
+            --profile xccdf_org.ssgproject.content_profile_cis_server_l1 \
+            --results-arf /root/rhel9_openscap_result/rhel9_reforzamiento_{{ inventory_hostname }}.xml \
+            --report /root/rhel9_openscap_result/rhel9_reforzamiento_{{ inventory_hostname }}.html \
+            /usr/share/xml/scap/ssg/content/ssg-rhel9-ds.xml
+          register: rhel_9_informe_reforzamiento
+      rescue:
+        - name: Alerta sobre warning en obtención de proyecto
+          ansible.builtin.debug:
+            msg: ""
+
+    - name: create bash remediation FIX SH RHEL9
+      command: bash -c "sudo oscap xccdf generate fix --fix-type bash --profile ospp --output /root/rhel9_openscap_result/rhel9_remediacion{{ inventory_hostname }}.sh /root/rhel9_openscap_result/rhel9_reforzamiento_{{ inventory_hostname }}.xml"
+
+    - name: create ansible remediation FIX playbook RHEL9
+      command: bash -c "sudo oscap xccdf generate fix --fix-type ansible --profile ospp --output /root/rhel9_openscap_result/rhel9_remediacion{{ inventory_hostname }}.yml /root/rhel9_openscap_result/rhel9_reforzamiento_{{ inventory_hostname }}.xml"
+
+    - name: copiar archivo remediation a local EE
+      ansible.builtin.fetch:
+        src: /root/rhel9_openscap_result/rhel9_remediacion{{ inventory_hostname }}.yml
+        dest: /runner/project/rhel9_remediacion{{ inventory_hostname }}.yml
+        flat: yes
+      become: yes
+
     - name: validacion de directiorio de ejecución
       shell: ls -l *;pwd
       register: dir_output
@@ -14,52 +54,6 @@
         var: dir_output
 
 
-
-    # - name: Instalacion de OpenScap scanner - security-guide - utils
-    #   ansible.builtin.yum:
-    #     name:
-    #       - openscap
-    #       - openscap-utils
-    #       - scap-security-guide
-    #     state: latest
-
-    # - name: Crear subdirectorio si no existe
-    #   ansible.builtin.file:
-    #     path: /root/rhel9_openscap_result
-    #     state: directory
-
-    # - name: Bloque para obtención de reporte OpenScap
-    #   block:
-    #     - name: Creando reporte OpenScap RHEL9
-    #       ansible.builtin.command: oscap xccdf eval \
-    #         --profile xccdf_org.ssgproject.content_profile_cis_server_l1 \
-    #         --results-arf /root/rhel9_openscap_result/rhel9_reforzamiento_{{ inventory_hostname }}.xml \
-    #         --report /root/rhel9_openscap_result/rhel9_reforzamiento_{{ inventory_hostname }}.html \
-    #         /usr/share/xml/scap/ssg/content/ssg-rhel9-ds.xml
-    #       register: rhel_9_informe_reforzamiento
-    #   rescue:
-    #     - name: Alerta sobre warning en obtención de proyecto
-    #       ansible.builtin.debug:
-    #         msg: ""
-
-    # - name: create bash remediation FIX SH RHEL9
-    #   command: bash -c "sudo oscap xccdf generate fix --fix-type bash --profile ospp --output /root/rhel9_openscap_result/rhel9_remediacion{{ inventory_hostname }}.sh /root/rhel9_openscap_result/rhel9_reforzamiento_{{ inventory_hostname }}.xml"
-
-    # - name: create ansible remediation FIX playbook RHEL9
-    #   command: bash -c "sudo oscap xccdf generate fix --fix-type ansible --profile ospp --output /root/rhel9_openscap_result/rhel9_remediacion{{ inventory_hostname }}.yml /root/rhel9_openscap_result/rhel9_reforzamiento_{{ inventory_hostname }}.xml"
-
-    # - name: Crear subdirectorio si no existe
-    #   ansible.builtin.file:
-    #     path: /reportes_openscap_servidores_rhel/{{ inventory_hostname }}
-    #     state: directory
-    #   delegate_to: localhost
-
-    # - name: copiar archivo html a local EE
-    #   ansible.builtin.fetch:
-    #     src: /root/rhel9_openscap_result/rhel9_reforzamiento_{{ inventory_hostname }}.html
-    #     dest: /reportes_openscap_servidores_rhel/{{ inventory_hostname }}/
-    #     flat: yes
-    #   become: yes
 
       
 
