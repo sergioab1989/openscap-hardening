@@ -4,27 +4,34 @@
   gather_facts: false
   tasks:
 
-    - name: Leer el archivo del playbook
-      ansible.builtin.slurp:
-        src: /root/rhel9_openscap_result/rhel9_remediacion_{{ inventory_hostname }}.yml
-      register: playbook_content
+    - name: Instalacion de OpenScap scanner - security-guide - utils
+      ansible.builtin.yum:
+        name:
+          - openscap
+          - openscap-utils
+          - scap-security-guide
+        state: latest
 
-    - name: Extraer solo las variables entre vars y tasks
-      ansible.builtin.copy:
-        dest: /root/rhel9_openscap_result/rhel9_remediacion_{{ inventory_hostname }}_vars.yml
-        content: |
-          {% set inside_vars = false %}
-          {% for line in (playbook_content.content | b64decode).split('\n') %}
-            {% if 'vars:' in line %}
-              {% set inside_vars = true %}
-            {% elif 'tasks:' in line %}
-              {% set inside_vars = false %}
-            {% endif %}
-            {% if inside_vars and ':' in line %}
-              {{ line }}
-            {% endif %}
-          {% endfor %}
+    - name: Crear subdirectorio si no existe
+      ansible.builtin.file:
+        path: /root/rhel9_openscap_result
+        state: directory
 
+    - name: Bloque para obtención de reporte OpenScap
+      block:
+        - name: Creando reporte OpenScap RHEL9
+          ansible.builtin.command: oscap xccdf eval \
+            --profile xccdf_org.ssgproject.content_profile_cis_server_l1 \
+            --results-arf /root/rhel9_openscap_result/rhel9_reforzamiento_{{ inventory_hostname }}.xml \
+            --report /root/rhel9_openscap_result/rhel9_reforzamiento_{{ inventory_hostname }}.html \
+            /usr/share/xml/scap/ssg/content/ssg-rhel9-ds.xml
+          register: rhel_9_informe_reforzamiento
+      rescue:
+        - name: Alerta sobre warning en obtencion de proyecto
+          ansible.builtin.debug:
+            msg: "Error se debe a obtencion de remediaciones y validacion de vulnerabilidades las cuales aparecen como fail"
+
+            
 
     # - name: Cambiar valor de hosts en el playbook YAML
     #   ansible.builtin.lineinfile:
@@ -48,36 +55,11 @@
     #     data:      
     #       host_play: "/runner/project/rhel9_remediacion_{{ inventory_hostname }}.yml"
 
-# - name: import playbook
-#   ansible.builtin.import_playbook: "{{ host_play }}"
+- name: import playbook
+  ansible.builtin.import_playbook: "{{ host_play }}"
 
 
-    # - name: Instalacion de OpenScap scanner - security-guide - utils
-    #   ansible.builtin.yum:
-    #     name:
-    #       - openscap
-    #       - openscap-utils
-    #       - scap-security-guide
-    #     state: latest
 
-    # - name: Crear subdirectorio si no existe
-    #   ansible.builtin.file:
-    #     path: /root/rhel9_openscap_result
-    #     state: directory
-
-    # - name: Bloque para obtención de reporte OpenScap
-    #   block:
-    #     - name: Creando reporte OpenScap RHEL9
-    #       ansible.builtin.command: oscap xccdf eval \
-    #         --profile xccdf_org.ssgproject.content_profile_cis_server_l1 \
-    #         --results-arf /root/rhel9_openscap_result/rhel9_reforzamiento_{{ inventory_hostname }}.xml \
-    #         --report /root/rhel9_openscap_result/rhel9_reforzamiento_{{ inventory_hostname }}.html \
-    #         /usr/share/xml/scap/ssg/content/ssg-rhel9-ds.xml
-    #       register: rhel_9_informe_reforzamiento
-    #   rescue:
-    #     - name: Alerta sobre warning en obtención de proyecto
-    #       ansible.builtin.debug:
-    #         msg: ""
 
     # - name: create bash remediation FIX SH RHEL9
     #   command: bash -c "sudo oscap xccdf generate fix --fix-type bash --profile ospp --output /root/rhel9_openscap_result/rhel9_remediacion{{ inventory_hostname }}.sh /root/rhel9_openscap_result/rhel9_reforzamiento_{{ inventory_hostname }}.xml"
