@@ -55,8 +55,8 @@
     #     data:      
     #       host_play: "/runner/project/rhel9_remediacion_{{ inventory_hostname }}.yml"
 
-- name: import playbook
-  ansible.builtin.import_playbook: "{{ host_play }}"
+# - name: import playbook
+#   ansible.builtin.import_playbook: "{{ host_play }}"
 
 
 
