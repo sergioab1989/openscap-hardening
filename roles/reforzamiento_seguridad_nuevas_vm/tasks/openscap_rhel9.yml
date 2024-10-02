@@ -30,5 +30,5 @@
   ansible.builtin.include_tasks: rhel9/rhel9_guardar_archivo_ee_post.yml
 
 # rebooteo de sistema operativo
-- name: Reboot de sistema operativo RHEL9
-  ansible.builtin.include_tasks: rhel9/rhel9_reboot_sistema.yml
+# - name: Reboot de sistema operativo RHEL9
+#   ansible.builtin.include_tasks: rhel9/rhel9_reboot_sistema.yml
