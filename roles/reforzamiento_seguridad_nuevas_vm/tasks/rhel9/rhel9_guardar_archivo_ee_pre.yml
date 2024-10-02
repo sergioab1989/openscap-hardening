@@ -5,7 +5,7 @@
 
 - name: Crear subdirectorio si no existe
   ansible.builtin.file:
-    path: /home/runner/reportes_openscap_servidores_rhel/{{ inventory_hostname }}
+    path: /reportes_openscap_servidores_rhel/{{ inventory_hostname }}
     state: directory
   delegate_to: localhost
 
