@@ -5,18 +5,18 @@
 
 - name: Crear subdirectorio si no existe
   ansible.builtin.file:
-    path: /reportes_openscap_servidores_rhel/{{ inventory_hostname }}
+    path: /home/runner/reportes_openscap_servidores_rhel/{{ inventory_hostname }}
     state: directory
   delegate_to: localhost
   become: true
 
-# - name: copiar archivo html a local EE
-#   ansible.builtin.fetch:
-#     src: /root/rhel9_openscap_result/rhel9_reforzamiento_{{ inventory_hostname }}.html
-#     dest: /reportes_openscap_servidores_rhel/{{ inventory_hostname }}/
-#     flat: yes
-#   become: yes
+- name: copiar archivo html a local EE
+  ansible.builtin.fetch:
+    src: /root/rhel9_openscap_result/rhel9_reforzamiento_{{ inventory_hostname }}.html
+    dest: /home/runner/reportes_openscap_servidores_rhel/{{ inventory_hostname }}/
+    flat: yes
+  become: yes
 
-# - name: cambiar nombre de archivo
-#   ansible.builtin.shell: "mv /reportes_openscap_servidores_rhel/{{ inventory_hostname }}/rhel9_reforzamiento_{{ inventory_hostname }}.html /reportes_openscap_servidores_rhel/{{ inventory_hostname }}/rhel9_reforzamiento_{{ inventory_hostname }}_{{ current_datetime }}.html"
-#   delegate_to: localhost
+- name: cambiar nombre de archivo
+  ansible.builtin.shell: "mv /home/runner/reportes_openscap_servidores_rhel/{{ inventory_hostname }}/rhel9_reforzamiento_{{ inventory_hostname }}.html /home/runner/reportes_openscap_servidores_rhel/{{ inventory_hostname }}/rhel9_reforzamiento_{{ inventory_hostname }}_{{ current_datetime }}.html"
+  delegate_to: localhost

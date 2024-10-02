@@ -15,5 +15,5 @@
     cmd: git clone http://{{ git_username  }}:{{ git_password }}@172.27.213.17:17990/scm/ansible/reportes_openscap_servidores_rhel.git
     chdir: /
   delegate_to: localhost
-  no_log: true  
+  no_log: true
 
