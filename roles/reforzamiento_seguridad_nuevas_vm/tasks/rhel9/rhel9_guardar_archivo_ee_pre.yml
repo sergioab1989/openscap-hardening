@@ -1,10 +1,13 @@
 ---
 - name: Crear subdirectorio si no existe
+  ansible.builtin.shell: "whoami;pwd;ls -l"
+  delegate_to: localhost
+
+- name: Crear subdirectorio si no existe
   ansible.builtin.file:
-    path: /reportes_openscap_servidores_rhel/{{ inventory_hostname }}
+    path: /home/runner/reportes_openscap_servidores_rhel/{{ inventory_hostname }}
     state: directory
   delegate_to: localhost
-  become: yes
 
 # - name: copiar archivo html a local EE
 #   ansible.builtin.fetch:
