@@ -1,7 +1,7 @@
 ---
 # Analisis y extracion de datos antes de generar mitigacion de vulnerabilidades
-# - name: Generacion de informe de vulnerabilidades RHEL9 Pre-mitigacion de vulnerabilidades
-#   ansible.builtin.include_tasks: rhel9/rhel9_crear_archivo_reporte_pre.yml
+- name: Generacion de informe de vulnerabilidades RHEL9 Pre-mitigacion de vulnerabilidades
+  ansible.builtin.include_tasks: rhel9/rhel9_crear_archivo_reporte_pre.yml
 
 - name: Validacion de las vulnerabilidades encontradas previo a mitigacion en RHEL9
   ansible.builtin.include_tasks: rhel9/rhel9_validacion_vulnerabilidades_pre.yml
