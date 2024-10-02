@@ -8,6 +8,7 @@
     path: /reportes_openscap_servidores_rhel/{{ inventory_hostname }}
     state: directory
   delegate_to: localhost
+  become: true
 
 # - name: copiar archivo html a local EE
 #   ansible.builtin.fetch:
