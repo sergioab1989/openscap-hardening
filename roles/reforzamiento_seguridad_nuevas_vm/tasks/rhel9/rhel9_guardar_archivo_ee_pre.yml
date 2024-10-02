@@ -4,7 +4,8 @@
     path: /reportes_openscap_servidores_rhel/{{ inventory_hostname }}
     state: directory
   delegate_to: localhost
-
+  become: yes
+  
 - name: copiar archivo html a local EE
   ansible.builtin.fetch:
     src: /root/rhel9_openscap_result/rhel9_reforzamiento_{{ inventory_hostname }}.html
