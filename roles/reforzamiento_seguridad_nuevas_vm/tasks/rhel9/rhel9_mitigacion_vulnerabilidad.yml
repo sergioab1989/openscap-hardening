@@ -2,8 +2,8 @@
 - name: Configure System Cryptography Policy
   ansible.builtin.include_tasks: system_settings/configure_system_cryptography_policy.yml
 
-# - name: Lock Accounts After Failed Password Attempts
-#   ansible.builtin.include_tasks: system_settings/lock_accounts_after_failed_password_attempts.yml
+- name: Lock Accounts After Failed Password Attempts
+  ansible.builtin.include_tasks: system_settings/lock_accounts_after_failed_password_attempts.yml
 
 - name: Prevent Login to Accounts With Empty Password
   ansible.builtin.include_tasks: system_settings/prevent_login_to_accounts_with_empty_password.yml
