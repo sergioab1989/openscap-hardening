@@ -1,6 +1,6 @@
 ---
 - name: Escaneo y remediacion de vulnerabilidades para nuevas VM
   hosts: all
-  gather_facts: false   
+  gather_facts: true  
   roles:
     - reforzamiento_seguridad_nuevas_vm
