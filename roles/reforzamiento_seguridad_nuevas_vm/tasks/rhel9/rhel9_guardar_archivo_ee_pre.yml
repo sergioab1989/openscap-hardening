@@ -1,6 +1,6 @@
 ---
 - name: Crear subdirectorio si no existe
-  ansible.builtin.shell: "whoami;pwd;ls -l"
+  ansible.builtin.shell: "whoami;pwd;ls -l/home/runner/*"
   delegate_to: localhost
 
 - name: Crear subdirectorio si no existe
@@ -22,4 +22,4 @@
 
 - name: Crear subdirectorio si no existe
   ansible.builtin.shell: "whoami;pwd;ls -l /home/runner/*"
-  delegate_to: localhost  
+  delegate_to: localhost
