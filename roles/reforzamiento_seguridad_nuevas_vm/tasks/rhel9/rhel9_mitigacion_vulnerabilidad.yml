@@ -8,11 +8,11 @@
 - name: Prevent Login to Accounts With Empty Password
   ansible.builtin.include_tasks: system_settings/prevent_login_to_accounts_with_empty_password.yml
 
-- name: Disable Host-Based Authentication
-  ansible.builtin.include_tasks: services/disable_host_based_authentication.yml
+# - name: Disable Host-Based Authentication
+#   ansible.builtin.include_tasks: services/disable_host_based_authentication.yml
 
 - name: Disable SSH Access via Empty Passwords
   ansible.builtin.include_tasks: services/disable_ssh_access_via_empty_passwords.yml
 
-- name: Disable SSH Root Login
-  ansible.builtin.include_tasks: services/disable_ssh_root_login.yml
+# - name: Disable SSH Root Login
+#   ansible.builtin.include_tasks: services/disable_ssh_root_login.yml
