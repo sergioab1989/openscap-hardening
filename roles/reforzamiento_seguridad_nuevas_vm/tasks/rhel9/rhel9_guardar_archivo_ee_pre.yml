@@ -1,9 +1,5 @@
 ---
 - name: Crear subdirectorio si no existe
-  ansible.builtin.shell: "whoami;pwd;ls -l"
-  delegate_to: localhost
-
-- name: Crear subdirectorio si no existe
   ansible.builtin.file:
     path: /home/runner/reportes_openscap_servidores_rhel/{{ inventory_hostname }}
     state: directory
@@ -18,8 +14,4 @@
 
 - name: cambiar nombre de archivo
   ansible.builtin.shell: "mv /home/runner/reportes_openscap_servidores_rhel/{{ inventory_hostname }}/rhel9_reforzamiento_{{ inventory_hostname }}.html /home/runner/reportes_openscap_servidores_rhel/{{ inventory_hostname }}/rhel9_reforzamiento_{{ inventory_hostname }}_{{ current_datetime }}.html"
-  delegate_to: localhost
-
-- name: Crear subdirectorio si no existe
-  ansible.builtin.shell: "whoami;pwd;ls -l /home/runner/*"
   delegate_to: localhost
