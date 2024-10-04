@@ -8,7 +8,7 @@
     - ensure_pam_enforces_password_requirements.yml
     - ensure_the_default_bash_umask_is_set_correctly.yml
     - ensure_the_default_umask_is_set_correctly_in_etc_profile.yml
-    - lock_accounts_after_failed _password_attempts.yml
+    - lock_accounts_after_failed_password_attempts.yml
     - network_parameters_for_hosts_only.yml
     - network_related_kernel_runtime_parameters_for_hosts_and_routers.yml
     - prevent_login_to_accounts_with_empty_password.yml
