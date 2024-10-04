@@ -12,7 +12,7 @@
 - name: Copia de archivo a Entorno de Ejecucion local de informe previo a mitigacion en RHEL8
   ansible.builtin.include_tasks: rhel8/rhe8_guardar_archivo_ee_pre.yml
 
-# Aplicacion de mitigacion de vulnerabilidades y reinicio de sistema operativo
+# Aplicacion de mitigacion de vulnerabilidades
 - name: remediacion de vulnerabilidades de RHEL8
   ansible.builtin.include_tasks: rhel8/rhel8_mitigacion_vulnerabilidad.yml
 
@@ -29,6 +29,6 @@
 - name: remediacion de vulnerabilidades de RHEL8
   ansible.builtin.include_tasks: rhel8/rhe8_guardar_archivo_ee_post.yml
 
-# rebooteo de sistema operativo
-- name: Reboot de sistema operativo RHEL8
-  ansible.builtin.include_tasks: rhel8/rhel8_reboot_sistema.yml
+# # rebooteo de sistema operativo
+# - name: Reboot de sistema operativo RHEL8
+#   ansible.builtin.include_tasks: rhel8/rhel8_reboot_sistema.yml

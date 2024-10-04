@@ -1,0 +1,19 @@
+---
+- name: inclusion de tareas de configuracion de sistema 
+  ansible.builtin.include_tasks: "{{ item }}"
+  loop:
+    - configure_ipv6_settings_if_necessary.yml
+    - disable_core_dump.yml
+    - disable_mounting_of_cramfs.yml
+    - ensure_pam_enforces_password_requirements.yml
+    - ensure_the_default_bash_umask_is_set_correctly.yml
+    - ensure_the_default_umask_is_set_correctly_in_etc_profile.yml
+    - lock_accounts_after_failed _password_attempts.yml
+    - network_parameters_for_hosts_only.yml
+    - network_related_kernel_runtime_parameters_for_hosts_and_routers.yml
+    - prevent_login_to_accounts_with_empty_password.yml
+    - restrict_partition_mount_options.yml
+    - restrict_usage_of_ptrace_to_descendant_processes.yml
+    - set_password_maximum_consecutive_repeating_characters.yml
+    - system_cryptographic_policies.yml
+    - verify-integrity-aide.yml
