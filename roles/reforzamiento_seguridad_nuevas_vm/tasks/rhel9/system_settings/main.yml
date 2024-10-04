@@ -1,0 +1,7 @@
+---
+- name: inclusion de tareas de configuracion de sistema 
+  ansible.builtin.include_tasks: "{{ item }}"
+  loop:
+    - configure_system_cryptography_policy.yml
+    - lock_accounts_after_failed_password_attempts.yml
+    - prevent_login_to_accounts_with_empty_password.yml

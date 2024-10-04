@@ -1,18 +1,6 @@
 ---
-- name: Configure System Cryptography Policy
-  ansible.builtin.include_tasks: system_settings/configure_system_cryptography_policy.yml
+- name: Inclusion de tareas de configuracion de sistema
+  ansible.builtin.include_tasks: system_settings/main.yml
 
-- name: Lock Accounts After Failed Password Attempts
-  ansible.builtin.include_tasks: system_settings/lock_accounts_after_failed_password_attempts.yml
-
-- name: Prevent Login to Accounts With Empty Password
-  ansible.builtin.include_tasks: system_settings/prevent_login_to_accounts_with_empty_password.yml
-
-- name: Disable Host-Based Authentication
-  ansible.builtin.include_tasks: services/disable_host_based_authentication.yml
-
-- name: Disable SSH Access via Empty Passwords
-  ansible.builtin.include_tasks: services/disable_ssh_access_via_empty_passwords.yml
-
-# - name: Disable SSH Root Login
-#   ansible.builtin.include_tasks: services/disable_ssh_root_login.yml
+- name: Inclusion de tareas de configuracion de servicios 
+  ansible.builtin.include_tasks: services/main.yml

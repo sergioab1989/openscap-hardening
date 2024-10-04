@@ -1,16 +1,17 @@
 ---
 - name: Validacion de version de sistema operativo
-  ansible.builtin.include_tasks: validar_version_os.yml
+  block:
   
-- name: subproceso de reforzamiento RHEL7
-  ansible.builtin.include_tasks: openscap_rhel7.yml
-  when: version  == "RHEL7"
+    - name: subproceso de reforzamiento RHEL7
+      ansible.builtin.include_tasks: openscap_rhel7.yml
+      when: ansible_distribution_major_version  == "7"
 
-- name: subproceso de reforzamiento RHEL8
-  ansible.builtin.include_tasks: openscap_rhel8.yml
-  when: version  == "RHEL8"
+    - name: subproceso de reforzamiento RHEL8
+      ansible.builtin.include_tasks: openscap_rhel8.yml
+      when: ansible_distribution_major_version  == "8"
+      
+    - name: subproceso de reforzamiento RHEL9
+      ansible.builtin.include_tasks: openscap_rhel9.yml
+      when: ansible_distribution_major_version  == "9"
   
-- name: subproceso de reforzamiento RHEL9
-  ansible.builtin.include_tasks: openscap_rhel9.yml
-  when: version  == "RHEL9"
-
+  when: ansible_distribution == "RedHat"
