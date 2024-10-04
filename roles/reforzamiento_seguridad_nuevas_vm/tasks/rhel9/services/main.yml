@@ -5,3 +5,5 @@
     - disable_host_based_authentication.yml
     - disable_ssh_access_via_empty_passwords.yml
     # - disable_ssh_root_login.yml
+  loop_control:
+    loop_var: services_item

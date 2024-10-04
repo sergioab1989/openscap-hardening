@@ -17,3 +17,5 @@
     - set_password_maximum_consecutive_repeating_characters.yml
     - system_cryptographic_policies.yml
     - verify-integrity-aide.yml
+  loop_control:
+    loop_var: system_settings_item    
