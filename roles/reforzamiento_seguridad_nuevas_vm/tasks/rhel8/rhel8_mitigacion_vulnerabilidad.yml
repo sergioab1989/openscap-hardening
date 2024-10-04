@@ -1,6 +1,6 @@
 ---
 - name: Inclusion de tareas mitigacion de vulnerabilidades de configuraciones de sistema
-  ansible.builtin.include_tasks: system_settings/main.yml
+  ansible.builtin.include_tasks: system-settings/main.yml
 
 - name: Inclusion de tareas mitigacion de vulnerabilidades de servicios
   ansible.builtin.include_tasks: services/main.yml

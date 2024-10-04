@@ -1,33 +1,33 @@
 ---
-# Analisis y extracion de datos antes de generar mitigacion de vulnerabilidades
-- name: Generacion de informe de vulnerabilidades RHEL8 Pre-mitigacion de vulnerabilidades
-  ansible.builtin.include_tasks: rhel8/rhel8_crear_archivo_reporte_pre.yml
+# # Analisis y extracion de datos antes de generar mitigacion de vulnerabilidades
+# - name: Generacion de informe de vulnerabilidades RHEL8 Pre-mitigacion de vulnerabilidades
+#   ansible.builtin.include_tasks: rhel8/rhel8_crear_archivo_reporte_pre.yml
 
-- name: Validacion de las vulnerabilidades encontradas previo a mitigacion en RHEL8
-  ansible.builtin.include_tasks: rhel8/rhel8_validacion_vulnerabilidades_pre.yml
+# - name: Validacion de las vulnerabilidades encontradas previo a mitigacion en RHEL8
+#   ansible.builtin.include_tasks: rhel8/rhel8_validacion_vulnerabilidades_pre.yml
 
-- name: Recoleccion de datos previo a mitigacion en RHEL8
-  ansible.builtin.include_tasks: rhel8/rhel8_recoleccion_vulnerabilidades_pre.yml
+# - name: Recoleccion de datos previo a mitigacion en RHEL8
+#   ansible.builtin.include_tasks: rhel8/rhel8_recoleccion_vulnerabilidades_pre.yml
 
-- name: Copia de archivo a Entorno de Ejecucion local de informe previo a mitigacion en RHEL8
-  ansible.builtin.include_tasks: rhel8/rhe8_guardar_archivo_ee_pre.yml
+# - name: Copia de archivo a Entorno de Ejecucion local de informe previo a mitigacion en RHEL8
+#   ansible.builtin.include_tasks: rhel8/rhe8_guardar_archivo_ee_pre.yml
 
 # Aplicacion de mitigacion de vulnerabilidades
 - name: remediacion de vulnerabilidades de RHEL8
   ansible.builtin.include_tasks: rhel8/rhel8_mitigacion_vulnerabilidad.yml
 
-# Analisis y extracion de datos posterior de generar mitigacion de vulnerabilidades
-- name: Generacion de informe de vulnerabilidades RHEL8 posterior mitigacion de vulnerabilidades
-  ansible.builtin.include_tasks: rhel8/rhel8_crear_archivo_reporte_post.yml
+# # Analisis y extracion de datos posterior de generar mitigacion de vulnerabilidades
+# - name: Generacion de informe de vulnerabilidades RHEL8 posterior mitigacion de vulnerabilidades
+#   ansible.builtin.include_tasks: rhel8/rhel8_crear_archivo_reporte_post.yml
 
-- name: remediacion de vulnerabilidades de RHEL8
-  ansible.builtin.include_tasks: rhel8/rhel8_validacion_vulnerabilidades_post.yml
+# - name: remediacion de vulnerabilidades de RHEL8
+#   ansible.builtin.include_tasks: rhel8/rhel8_validacion_vulnerabilidades_post.yml
 
-- name: remediacion de vulnerabilidades de RHEL8
-  ansible.builtin.include_tasks: rhel8/rhel8_recoleccion_vulnerabilidades_post.yml
+# - name: remediacion de vulnerabilidades de RHEL8
+#   ansible.builtin.include_tasks: rhel8/rhel8_recoleccion_vulnerabilidades_post.yml
 
-- name: remediacion de vulnerabilidades de RHEL8
-  ansible.builtin.include_tasks: rhel8/rhe8_guardar_archivo_ee_post.yml
+# - name: remediacion de vulnerabilidades de RHEL8
+#   ansible.builtin.include_tasks: rhel8/rhe8_guardar_archivo_ee_post.yml
 
 # # rebooteo de sistema operativo
 # - name: Reboot de sistema operativo RHEL8
