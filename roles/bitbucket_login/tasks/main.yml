@@ -13,7 +13,7 @@
 - name: Clonar repositorio desde Bitbucket
   ansible.builtin.command:
     cmd: git clone http://{{ git_username  }}:{{ git_password }}@172.27.213.17:17990/scm/ansible/reportes_openscap_servidores_rhel.git
-    chdir: /
+    chdir: /home/runner
   delegate_to: localhost
   no_log: true
 

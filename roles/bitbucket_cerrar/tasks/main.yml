@@ -1,34 +1,34 @@
 ---
 - name: Push to origin.
-  ansible.builtin.shell: "cd /reportes_openscap_servidores_rhel"
+  ansible.builtin.shell: "cd /home/runner/reportes_openscap_servidores_rhel"
   delegate_to: localhost
   
 - name: agregando archivos a repositorio git add
   ansible.builtin.command:
     cmd: git add .
-    chdir: /reportes_openscap_servidores_rhel 
+    chdir: /home/runner/reportes_openscap_servidores_rhel 
   delegate_to: localhost
 
 - name: ingresando el correo electronico
   ansible.builtin.command:
     cmd: git config --global user.email "jaromero@redhat.com"
-    chdir: /reportes_openscap_servidores_rhel
+    chdir: /home/runner/reportes_openscap_servidores_rhel
   delegate_to: localhost
 
 - name: ingresando el usuario
   ansible.builtin.command:
     cmd: git config --global user.name "jaromero"
-    chdir: /reportes_openscap_servidores_rhel
+    chdir: /home/runner/reportes_openscap_servidores_rhel
   delegate_to: localhost
 
 - name: Realizar commit de los cambios
   ansible.builtin.command:
     cmd: git commit -m "actualizacion de resultados de openscap {{ ansible_host }}"
-    chdir: /reportes_openscap_servidores_rhel 
+    chdir: /home/runner/reportes_openscap_servidores_rhel 
   delegate_to: localhost
 
 - name: Realizar commit de los cambios
   ansible.builtin.command:
     cmd: git push origin --force
-    chdir: /reportes_openscap_servidores_rhel 
+    chdir: /home/runner/reportes_openscap_servidores_rhel 
   delegate_to: localhost
