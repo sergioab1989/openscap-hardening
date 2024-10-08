@@ -1,34 +1,19 @@
 ---
-- name: Push to origin.
-  ansible.builtin.shell: "cd /home/runner/reportes_openscap_servidores_rhel"
-  delegate_to: localhost
-  
-- name: agregando archivos a repositorio git add
-  ansible.builtin.command:
-    cmd: git add .
-    chdir: /home/runner/reportes_openscap_servidores_rhel 
-  delegate_to: localhost
+- name: Configurar las variables de entorno para Bitbucket
+  set_fact:
+    git_username: "{{ lookup('env', 'usuario_git') }}"
+    git_password: "{{ lookup('env', 'password_git') }}"
+  no_log: true
 
-- name: ingresando el correo electronico
-  ansible.builtin.command:
-    cmd: git config --global user.email "jaromero@redhat.com"
-    chdir: /home/runner/reportes_openscap_servidores_rhel
-  delegate_to: localhost
+- name: Eliminar carpeta especificada de bitbucket en entorno de ejecucion
+  ansible.builtin.file:
+    path: /repositorio_openscap
+    state: absent
 
-- name: ingresando el usuario
+- name: Clonar repositorio desde Bitbucket
   ansible.builtin.command:
-    cmd: git config --global user.name "jaromero"
-    chdir: /home/runner/reportes_openscap_servidores_rhel
+    cmd: git clone http://{{ git_username  }}:{{ git_password }}@172.27.213.17:17990/scm/ansible/reportes_openscap_servidores_rhel.git
+    chdir: /home/runner
   delegate_to: localhost
+  no_log: true
 
-- name: Realizar commit de los cambios
-  ansible.builtin.command:
-    cmd: git commit -m "actualizacion de resultados de openscap {{ ansible_host }}"
-    chdir: /home/runner/reportes_openscap_servidores_rhel 
-  delegate_to: localhost
-
-- name: Realizar commit de los cambios
-  ansible.builtin.command:
-    cmd: git push origin --force
-    chdir: /home/runner/reportes_openscap_servidores_rhel 
-  delegate_to: localhost
