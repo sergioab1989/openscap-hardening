@@ -1,4 +1,8 @@
 ---
+- name: Obtener la fecha y hora actual
+  ansible.builtin.set_fact:
+    current_datetime: "{{ lookup('pipe', 'date +%Y%m%d%H%M%S') }}"
+    
 - name: Crear subdirectorio si no existe
   ansible.builtin.file:
     path: /home/runner/reportes_openscap_servidores_rhel/{{ inventory_hostname }}
