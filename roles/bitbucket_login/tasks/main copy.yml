@@ -11,13 +11,13 @@
 
 - name: ingresando el correo electronico
   ansible.builtin.command:
-    cmd: git config --global user.email "sergioab1989@gmail.com"
+    cmd: git config --global user.email "jaromero@redhat.com"
     chdir: /home/runner/reportes_openscap_servidores_rhel
   delegate_to: localhost
 
 - name: ingresando el usuario
   ansible.builtin.command:
-    cmd: git config --global user.name "sergioab1989"
+    cmd: git config --global user.name "jaromero"
     chdir: /home/runner/reportes_openscap_servidores_rhel
   delegate_to: localhost
 

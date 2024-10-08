@@ -4,5 +4,3 @@
   gather_facts: true  
   roles:
     - reforzamiento_seguridad_nuevas_vm
-
-#mm
