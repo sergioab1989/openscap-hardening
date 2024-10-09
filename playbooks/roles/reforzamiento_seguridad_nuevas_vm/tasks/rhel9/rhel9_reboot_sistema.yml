@@ -1,6 +1,5 @@
 ---
 - name: Esperando por el reinicio del servidor
   ansible.builtin.reboot:
-    reboot_timeout: 10
-    connect_timeout: 180
+    reboot_timeout: 180
   ignore_errors: true
