@@ -1,6 +1,6 @@
 ---
 - name: inclusion de tareas de configuracion de servicios 
-  ansible.builtin.include_tasks: "{{ item }}"
+  ansible.builtin.include_tasks: "{{ services_item }}"
   loop:
     - disable_host_based_authentication.yml
     - disable_ssh_access_via_empty_passwords.yml
