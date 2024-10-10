@@ -1,0 +1,16 @@
+---
+- name: inclusion de tareas de configuracion de sistema 
+  ansible.builtin.include_tasks: "{{ item }}"
+  loop:
+    - configure_ipv6_settings_if_necessary.yml
+    - restrict_dynamic_mounting_and_unmounting_of_filesystems.yml
+    - restrict_partition_mount_options.yml
+    - restrict_programs_from_dangerous_execution_patterns.yml
+    - ensure_that_users_have_sensible_umask_values.yml
+    - network_related_kernel_runtime_parameters_for_hosts_and_routers.yml
+    - network_parameters_for_hosts_only.yml
+    - set_lockouts_for_failed_password_attempts.yml
+    - set_password_quality_requirements.yml
+    - verify_proper_storage_and_existence_of_password_hashes.yml
+  loop_control:
+    loop_var: system_settings_item

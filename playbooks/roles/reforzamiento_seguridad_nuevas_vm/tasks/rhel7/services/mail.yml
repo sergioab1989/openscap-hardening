@@ -1,0 +1,3 @@
+---
+- name: inclusion de tareas de configuracion de servicios
+  ansible.builtin.include_tasks: configure_openssh_server_if_necessary.yml
