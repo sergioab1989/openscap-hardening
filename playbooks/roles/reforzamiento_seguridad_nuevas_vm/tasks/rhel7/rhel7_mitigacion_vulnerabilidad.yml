@@ -1,4 +1,4 @@
 ---
 - name: Prueba mitigacion
-  dabug:
+  debug:
     msg: "prueba mitigacion"
