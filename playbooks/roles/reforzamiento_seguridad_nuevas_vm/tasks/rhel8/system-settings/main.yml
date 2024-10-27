@@ -22,7 +22,7 @@
     - restrict_usage_of_ptrace_to_descendant_processes.yml
     - set_password_maximum_consecutive_repeating_characters.yml
     - strengthen_the_default_ruleset.yml
-    - systemd-journald.yml
+    - systemdjournald.yml
     - system_cryptographic_policies.yml
     - verify_integrity_with_aide.yml
     - warning_banners_for_system_accesses.yml

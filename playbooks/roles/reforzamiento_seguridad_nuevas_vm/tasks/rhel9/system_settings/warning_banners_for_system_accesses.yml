@@ -1,0 +1,283 @@
+---
+#Implement a GUI Warning Banner
+#Enable GNOME3 Login Warning Banner
+- name: Gather the package facts
+  package_facts:
+    manager: auto
+  tags:
+  - CCE-87599-7
+  - DISA-STIG-RHEL-09-271010
+  - DISA-STIG-RHEL-09-271015
+  - NIST-800-171-3.1.9
+  - NIST-800-53-AC-8(a)
+  - NIST-800-53-AC-8(b)
+  - NIST-800-53-AC-8(c)
+  - dconf_gnome_banner_enabled
+  - low_complexity
+  - medium_disruption
+  - medium_severity
+  - no_reboot_needed
+  - unknown_strategy
+
+- name: Enable GNOME3 Login Warning Banner
+  ini_file:
+    dest: /etc/dconf/db/distro.d/00-security-settings
+    section: org/gnome/login-screen
+    option: banner-message-enable
+    value: 'true'
+    create: true
+    no_extra_spaces: true
+  when: '"gdm" in ansible_facts.packages'
+  tags:
+  - CCE-87599-7
+  - DISA-STIG-RHEL-09-271010
+  - DISA-STIG-RHEL-09-271015
+  - NIST-800-171-3.1.9
+  - NIST-800-53-AC-8(a)
+  - NIST-800-53-AC-8(b)
+  - NIST-800-53-AC-8(c)
+  - dconf_gnome_banner_enabled
+  - low_complexity
+  - medium_disruption
+  - medium_severity
+  - no_reboot_needed
+  - unknown_strategy
+
+- name: Prevent user modification of GNOME banner-message-enabled
+  lineinfile:
+    path: /etc/dconf/db/distro.d/locks/00-security-settings-lock
+    regexp: ^/org/gnome/login-screen/banner-message-enable$
+    line: /org/gnome/login-screen/banner-message-enable
+    create: true
+  when: '"gdm" in ansible_facts.packages'
+  tags:
+  - CCE-87599-7
+  - DISA-STIG-RHEL-09-271010
+  - DISA-STIG-RHEL-09-271015
+  - NIST-800-171-3.1.9
+  - NIST-800-53-AC-8(a)
+  - NIST-800-53-AC-8(b)
+  - NIST-800-53-AC-8(c)
+  - dconf_gnome_banner_enabled
+  - low_complexity
+  - medium_disruption
+  - medium_severity
+  - no_reboot_needed
+  - unknown_strategy
+
+- name: Dconf Update
+  command: dconf update
+  when: '"gdm" in ansible_facts.packages'
+  tags:
+  - CCE-87599-7
+  - DISA-STIG-RHEL-09-271010
+  - DISA-STIG-RHEL-09-271015
+  - NIST-800-171-3.1.9
+  - NIST-800-53-AC-8(a)
+  - NIST-800-53-AC-8(b)
+  - NIST-800-53-AC-8(c)
+  - dconf_gnome_banner_enabled
+  - low_complexity
+  - medium_disruption
+  - medium_severity
+  - no_reboot_needed
+  - unknown_strategy
+
+#Implement a GUI Warning Banner
+#Set the GNOME3 Login Warning Banner Text
+- name: Gather the package facts
+  package_facts:
+    manager: auto
+  tags:
+  - CCE-86529-5
+  - NIST-800-171-3.1.9
+  - NIST-800-53-AC-8(a)
+  - NIST-800-53-AC-8(c)
+  - dconf_gnome_login_banner_text
+  - low_complexity
+  - medium_disruption
+  - medium_severity
+  - no_reboot_needed
+  - unknown_strategy
+- name: XCCDF Value login_banner_text # promote to variable
+  set_fact:
+    login_banner_text: !!str ^(Authorized[\s\n]+uses[\s\n]+only\.[\s\n]+All[\s\n]+activity[\s\n]+may[\s\n]+be[\s\n]+monitored[\s\n]+and[\s\n]+reported\.|^(?!.*(\\|fedora|rhel|sle|ubuntu)).*)$
+  tags:
+    - always
+
+- name: Set the GNOME3 Login Warning Banner Text
+  file:
+    path: /etc/dconf/db/{{ item }}
+    owner: root
+    group: root
+    mode: 493
+    state: directory
+  with_items:
+  - distro.d
+  - distro.d/locks
+  when: '"gdm" in ansible_facts.packages'
+  tags:
+  - CCE-86529-5
+  - NIST-800-171-3.1.9
+  - NIST-800-53-AC-8(a)
+  - NIST-800-53-AC-8(c)
+  - dconf_gnome_login_banner_text
+  - low_complexity
+  - medium_disruption
+  - medium_severity
+  - no_reboot_needed
+  - unknown_strategy
+
+- name: Set the GNOME3 Login Warning Banner Text
+  file:
+    path: /etc/dconf/db/distro.d/{{ item }}
+    owner: root
+    group: root
+    mode: 420
+    state: touch
+  with_items:
+  - 00-security-settings
+  - locks/00-security-settings-lock
+  when: '"gdm" in ansible_facts.packages'
+  tags:
+  - CCE-86529-5
+  - NIST-800-171-3.1.9
+  - NIST-800-53-AC-8(a)
+  - NIST-800-53-AC-8(c)
+  - dconf_gnome_login_banner_text
+  - low_complexity
+  - medium_disruption
+  - medium_severity
+  - no_reboot_needed
+  - unknown_strategy
+
+- name: Set the GNOME3 Login Warning Banner Text
+  ini_file:
+    dest: /etc/dconf/db/distro.d/00-security-settings
+    section: org/gnome/login-screen
+    option: banner-message-text
+    value: '''{{ login_banner_text | regex_replace("^\^(.*)\$$", "\1") | regex_replace("^\((.*\.)\|.*\)$",
+      "\1") | regex_replace("\[\\s\\n\]\+"," ") | regex_replace("\(\?:\[\\n\]\+\|\(\?:\\\\n\)\+\)",
+      "(n)*") | regex_replace("\\", "") | regex_replace("\(n\)\*", "\\n") }}'''
+    create: true
+    no_extra_spaces: true
+  when: '"gdm" in ansible_facts.packages'
+  tags:
+  - CCE-86529-5
+  - NIST-800-171-3.1.9
+  - NIST-800-53-AC-8(a)
+  - NIST-800-53-AC-8(c)
+  - dconf_gnome_login_banner_text
+  - low_complexity
+  - medium_disruption
+  - medium_severity
+  - no_reboot_needed
+  - unknown_strategy
+
+- name: Prevent user modification of the GNOME3 Login Warning Banner Text
+  lineinfile:
+    path: /etc/dconf/db/distro.d/locks/00-security-settings-lock
+    regexp: ^/org/gnome/login-screen/banner-message-text$
+    line: /org/gnome/login-screen/banner-message-text
+    create: true
+    state: present
+  when: '"gdm" in ansible_facts.packages'
+  tags:
+  - CCE-86529-5
+  - NIST-800-171-3.1.9
+  - NIST-800-53-AC-8(a)
+  - NIST-800-53-AC-8(c)
+  - dconf_gnome_login_banner_text
+  - low_complexity
+  - medium_disruption
+  - medium_severity
+  - no_reboot_needed
+  - unknown_strategy
+
+- name: Dconf Update
+  command: dconf update
+  when: '"gdm" in ansible_facts.packages'
+  tags:
+  - CCE-86529-5
+  - NIST-800-171-3.1.9
+  - NIST-800-53-AC-8(a)
+  - NIST-800-53-AC-8(c)
+  - dconf_gnome_login_banner_text
+  - low_complexity
+  - medium_disruption
+  - medium_severity
+  - no_reboot_needed
+  - unknown_strategy
+
+#Modify the System Login Banner
+- name: XCCDF Value login_banner_text # promote to variable
+  set_fact:
+    login_banner_text: !!str ^(Authorized[\s\n]+uses[\s\n]+only\.[\s\n]+All[\s\n]+activity[\s\n]+may[\s\n]+be[\s\n]+monitored[\s\n]+and[\s\n]+reported\.|^(?!.*(\\|fedora|rhel|sle|ubuntu)).*)$
+  tags:
+    - always
+
+- name: Modify the System Login Banner - Ensure Correct Banner
+  copy:
+    dest: /etc/issue
+    content: '{{ login_banner_text | regex_replace("^\^(.*)\$$", "\1") | regex_replace("^\((.*\.)\|.*\)$",
+      "\1") | regex_replace("\[\\s\\n\]\+"," ") | regex_replace("\(\?:\[\\n\]\+\|\(\?:\\\\n\)\+\)",
+      "\n") | regex_replace("\\", "") | wordwrap() }}'
+  when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  tags:
+  - CCE-83557-9
+  - DISA-STIG-RHEL-09-211020
+  - NIST-800-171-3.1.9
+  - NIST-800-53-AC-8(a)
+  - NIST-800-53-AC-8(c)
+  - banner_etc_issue
+  - low_complexity
+  - medium_disruption
+  - medium_severity
+  - no_reboot_needed
+  - unknown_strategy
+
+#Modify the System Login Banner for Remote Connections
+- name: XCCDF Value remote_login_banner_text # promote to variable
+  set_fact:
+    remote_login_banner_text: !!str ^(Authorized[\s\n]+uses[\s\n]+only\.[\s\n]+All[\s\n]+activity[\s\n]+may[\s\n]+be[\s\n]+monitored[\s\n]+and[\s\n]+reported\.|^(?!.*(\\|fedora|rhel|sle|ubuntu)).*)$
+  tags:
+    - always
+
+- name: Modify the System Login Banner for Remote Connections - ensure correct banner
+  copy:
+    dest: /etc/issue.net
+    content: '{{ remote_login_banner_text | regex_replace("^\^(.*)\$$", "\1") | regex_replace("^\((.*\.)\|.*\)$",
+      "\1") | regex_replace("\[\\s\\n\]\+"," ") | regex_replace("\(\?:\[\\n\]\+\|\(\?:\\\\n\)\+\)",
+      "\n") | regex_replace("\\", "") | wordwrap() }}'
+  when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  tags:
+  - CCE-86148-4
+  - banner_etc_issue_net
+  - low_complexity
+  - medium_disruption
+  - medium_severity
+  - no_reboot_needed
+  - unknown_strategy
+
+#Modify the System Message of the Day Banner
+- name: XCCDF Value motd_banner_text # promote to variable
+  set_fact:
+    motd_banner_text: !!str ^(Authorized[\s\n]+uses[\s\n]+only\.[\s\n]+All[\s\n]+activity[\s\n]+may[\s\n]+be[\s\n]+monitored[\s\n]+and[\s\n]+reported\.|^(?!.*(\\|fedora|rhel|sle|ubuntu)).*)$
+  tags:
+    - always
+
+- name: Modify the System Message of the Day Banner - ensure correct banner
+  copy:
+    dest: /etc/motd
+    content: '{{ motd_banner_text | regex_replace("^\^(.*)\$$", "\1") | regex_replace("^\((.*\.)\|.*\)$",
+      "\1") | regex_replace("\[\\s\\n\]\+"," ") | regex_replace("\(\?:\[\\n\]\+\|\(\?:\\\\n\)\+\)",
+      "\n") | regex_replace("\\", "") | wordwrap() }}'
+  when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  tags:
+  - CCE-83559-5
+  - banner_etc_motd
+  - low_complexity
+  - medium_disruption
+  - medium_severity
+  - no_reboot_needed
+  - unknown_strategy

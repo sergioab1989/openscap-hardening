@@ -2,8 +2,11 @@
 - name: inclusion de tareas de configuracion de servicios 
   ansible.builtin.include_tasks: "{{ services_item }}"
   loop:
+    - disable_avahi_server_if_possible.yml
     - disable_host_based_authentication.yml
     - disable_ssh_access_via_empty_passwords.yml
-    # - disable_ssh_root_login.yml
+    - dns_server.yml
+    - print_support.yml
+    # - disable_ssh_root_login.yml    
   loop_control:
     loop_var: services_item

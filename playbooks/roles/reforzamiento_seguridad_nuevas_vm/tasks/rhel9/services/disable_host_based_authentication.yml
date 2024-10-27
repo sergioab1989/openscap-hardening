@@ -1,3 +1,5 @@
+---
+#Disable Host-Based Authentication
 - name: Disable Host-Based Authentication
   block:
 
