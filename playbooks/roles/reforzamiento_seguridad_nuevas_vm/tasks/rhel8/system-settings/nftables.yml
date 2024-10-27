@@ -1,0 +1,84 @@
+---
+#Verify nftables Service is Disabled
+- name: Gather the package facts
+  package_facts:
+    manager: auto
+  tags:
+  - CCE-88428-8
+  - PCI-DSSv4-1.2.1
+  - disable_strategy
+  - low_complexity
+  - low_disruption
+  - medium_severity
+  - no_reboot_needed
+  - service_nftables_disabled
+
+- name: Block Disable service nftables
+  block:
+
+  - name: Disable service nftables
+    block:
+
+    - name: Disable service nftables
+      systemd:
+        name: nftables.service
+        enabled: 'no'
+        state: stopped
+        masked: 'yes'
+    rescue:
+
+    - name: Intentionally ignored previous 'Disable service nftables' failure, service
+        was already disabled
+      meta: noop
+  when: ( ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman",
+    "container"] and "firewalld" in ansible_facts.packages and "nftables" in ansible_facts.packages
+    )
+  tags:
+  - CCE-88428-8
+  - PCI-DSSv4-1.2.1
+  - disable_strategy
+  - low_complexity
+  - low_disruption
+  - medium_severity
+  - no_reboot_needed
+  - service_nftables_disabled
+
+- name: Unit Socket Exists - nftables.socket
+  command: systemctl -q list-unit-files nftables.socket
+  register: socket_file_exists
+  changed_when: false
+  failed_when: socket_file_exists.rc not in [0, 1]
+  check_mode: false
+  when: ( ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman",
+    "container"] and "firewalld" in ansible_facts.packages and "nftables" in ansible_facts.packages
+    )
+  tags:
+  - CCE-88428-8
+  - PCI-DSSv4-1.2.1
+  - disable_strategy
+  - low_complexity
+  - low_disruption
+  - medium_severity
+  - no_reboot_needed
+  - service_nftables_disabled
+
+- name: Disable socket nftables
+  systemd:
+    name: nftables.socket
+    enabled: 'no'
+    state: stopped
+    masked: 'yes'
+  when:
+  - ( ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+    and "firewalld" in ansible_facts.packages and "nftables" in ansible_facts.packages
+    )
+  - socket_file_exists.stdout_lines is search("nftables.socket",multiline=True)
+  tags:
+  - CCE-88428-8
+  - PCI-DSSv4-1.2.1
+  - disable_strategy
+  - low_complexity
+  - low_disruption
+  - medium_severity
+  - no_reboot_needed
+  - service_nftables_disabled
