@@ -14,11 +14,11 @@
     # - network_related_kernel_runtime_parameters_for_hosts_and_routers.yml
     # - nftables.yml
     # - prevent_login_to_accounts_with_empty_password.yml
-    # - restrict_dynamic_mounting_and_unmounting_of_filesystems.yml
+    - restrict_dynamic_mounting_and_unmounting_of_filesystems.yml
     # - restrict_partition_mount_options.yml
-    - strengthen_the_default_ruleset.yml
-    - systemd-journald.yml
-    - verify_integrity_with_aide.yml
-    - warning_banners_for_system_accesses.yml
+    # - strengthen_the_default_ruleset.yml
+    # - systemd-journald.yml
+    # - verify_integrity_with_aide.yml
+    # - warning_banners_for_system_accesses.yml
   loop_control:
     loop_var: system_settings_item

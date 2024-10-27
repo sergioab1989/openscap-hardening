@@ -166,6 +166,7 @@
   - reboot_required
 
 #Disable Mounting of jffs2
+- name: Ensure kernel module 'jffs2' is disabled
   lineinfile:
     create: true
     dest: /etc/modprobe.d/jffs2.conf
