@@ -1,4 +1,4 @@
-# ---
+---
 # - name: Clonando repositorio Bitbucket en entorno de ejecucion 
 #   hosts: localhost
 #   gather_facts: true 
