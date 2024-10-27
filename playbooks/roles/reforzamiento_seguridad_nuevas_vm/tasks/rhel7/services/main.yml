@@ -1,3 +1,12 @@
 ---
-- name: inclusion de tareas de configuracion de servicios
-  ansible.builtin.include_tasks: configure_openssh_server_if_necessary.yml
+- name: inclusion de tareas de configuracion de servicios 
+  ansible.builtin.include_tasks: "{{ services_item }}"
+  loop:
+    - configure_openssh_server_if_necessary.yml
+    - disable_avahi_server_if_possible.yml
+    - dns_server.yml
+    - print_support.yml
+    - tftp_server.yml
+    - web_server.yml
+  loop_control:
+    loop_var: services_item

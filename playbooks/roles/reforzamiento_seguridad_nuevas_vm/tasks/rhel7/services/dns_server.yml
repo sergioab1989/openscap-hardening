@@ -1,0 +1,14 @@
+---
+#Uninstall dnsmasq Package
+- name: Ensure dnsmasq is removed
+  package:
+    name: dnsmasq
+    state: absent
+  tags:
+  - CCE-90761-8
+  - disable_strategy
+  - low_complexity
+  - low_disruption
+  - low_severity
+  - no_reboot_needed
+  - package_dnsmasq_removed
