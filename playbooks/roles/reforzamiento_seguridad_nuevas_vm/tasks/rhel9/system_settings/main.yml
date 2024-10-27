@@ -2,20 +2,20 @@
 - name: inclusion de tareas de configuracion de sistema 
   ansible.builtin.include_tasks: "{{ system_settings_item }}"
   loop:
-    - configure_gnome_login_screen.yml
-    - configure_gnome_screen_locking.yml
-    - configure_ipv6_settings_if_necessary.yml
-    - configure_system_cryptography_policy.yml
-    - disable_wireless_through_software_configuration.yml
-    - enable_execshield.yml
-    - gnome_media_settings.yml
-    - lock_accounts_after_failed_password_attempts.yml
-    - network_parameters_for_hosts_only.yml
-    - network_related_kernel_runtime_parameters_for_hosts_and_routers.yml
-    - nftables.yml
-    - prevent_login_to_accounts_with_empty_password.yml
-    - restrict_dynamic_mounting_and_unmounting_of_filesystems.yml
-    - restrict_partition_mount_options.yml
+    # - configure_gnome_login_screen.yml
+    # - configure_gnome_screen_locking.yml
+    # - configure_ipv6_settings_if_necessary.yml
+    # - configure_system_cryptography_policy.yml
+    # - disable_wireless_through_software_configuration.yml
+    # - enable_execshield.yml
+    # - gnome_media_settings.yml
+    # - lock_accounts_after_failed_password_attempts.yml
+    # - network_parameters_for_hosts_only.yml
+    # - network_related_kernel_runtime_parameters_for_hosts_and_routers.yml
+    # - nftables.yml
+    # - prevent_login_to_accounts_with_empty_password.yml
+    # - restrict_dynamic_mounting_and_unmounting_of_filesystems.yml
+    # - restrict_partition_mount_options.yml
     - strengthen_the_default_ruleset.yml
     - systemd-journald.yml
     - verify_integrity_with_aide.yml
