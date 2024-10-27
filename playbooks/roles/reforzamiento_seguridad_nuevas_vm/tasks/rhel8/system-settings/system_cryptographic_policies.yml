@@ -1,4 +1,5 @@
 ---
+#Configure System Cryptography Policy
 - name: XCCDF Value var_system_crypto_policy # promote to variable
   set_fact:
     var_system_crypto_policy: !!str DEFAULT:NO-SHA1

@@ -1,4 +1,5 @@
 ---
+#Ensure the Default Umask is Set Correctly in /etc/profile
 - name: XCCDF Value var_accounts_user_umask # promote to variable
   set_fact:
     var_accounts_user_umask: !!str 027

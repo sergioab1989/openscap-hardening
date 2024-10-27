@@ -1,4 +1,5 @@
 ---
+#Ensure the Default Bash Umask is Set Correctly
 - name: Gather the package facts
   package_facts:
     manager: auto

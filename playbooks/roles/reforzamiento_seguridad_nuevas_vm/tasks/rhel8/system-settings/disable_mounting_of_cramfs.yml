@@ -1,4 +1,5 @@
 ---
+#Disable Mounting of cramfs
 - name: Ensure kernel module 'cramfs' is disabled
   lineinfile:
     create: true

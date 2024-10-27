@@ -1,4 +1,5 @@
 ---
+#Restrict usage of ptrace to descendant processes
 - name: List /etc/sysctl.d/*.conf files
   find:
     paths:
