@@ -1,4 +1,19 @@
 ---
+#Install systemd-journal-remote Package 
+- name: Ensure systemd-journal-remote is installed
+  package:
+    name: systemd-journal-remote
+    state: present
+  when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  tags:
+  - CCE-86760-6
+  - enable_strategy
+  - low_complexity
+  - low_disruption
+  - medium_severity
+  - no_reboot_needed
+  - package_systemd-journal-remote_installed
+
 #Ensure journald is configured to compress large log files
 - name: Ensure journald is configured to compress large log files - Search for a section
     in files
