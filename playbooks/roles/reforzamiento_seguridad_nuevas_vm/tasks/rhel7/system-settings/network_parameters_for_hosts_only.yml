@@ -1,5 +1,5 @@
 ---
-- name: Configure IPv6 Settings if Necessary
+- name: Network parameters for hosts only
   block:
 
     #disable kernel parameter for sending icmp redirects on all ipv4 interfaces

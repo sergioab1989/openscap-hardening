@@ -13,7 +13,7 @@
     - network_related_kernel_runtime_parameters_for_hosts_and_routers.yml
     # - restrict_dynamic_mounting_and_unmounting_of_filesystems.yml
     # - restrict_partition_mount_options.yml
-    # - restrict_programs_from_dangerous_execution_patterns.yml
+    - restrict_programs_from_dangerous_execution_patterns.yml
     # - set_lockouts_for_failed_password_attempts.yml
     # - set_password_quality_requirements.yml
     # - systemd-journald.yml
