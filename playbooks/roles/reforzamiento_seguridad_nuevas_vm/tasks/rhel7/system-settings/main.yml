@@ -9,7 +9,7 @@
     # - ensure_that_users_have_sensible_umask_values.yml
     # - gnome_media_settings.yml
     # - inspect_and_activate_default_firewalld_rules.yml
-    # - network_parameters_for_hosts_only.yml
+    - network_parameters_for_hosts_only.yml
     - network_related_kernel_runtime_parameters_for_hosts_and_routers.yml
     # - restrict_dynamic_mounting_and_unmounting_of_filesystems.yml
     # - restrict_partition_mount_options.yml
