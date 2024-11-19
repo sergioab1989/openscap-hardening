@@ -4,7 +4,7 @@
   loop:
     # - configure_gnome_login_screen.yml
     # - configure_gnome_screen_locking.yml
-    - configure_ipv6_settings_if_necessary.yml
+    # - configure_ipv6_settings_if_necessary.yml
     # - configure_rsyslogd_to_accept_remote_messages_if_acting_as_a_log_server.yml
     # - ensure_that_users_have_sensible_umask_values.yml
     # - gnome_media_settings.yml
