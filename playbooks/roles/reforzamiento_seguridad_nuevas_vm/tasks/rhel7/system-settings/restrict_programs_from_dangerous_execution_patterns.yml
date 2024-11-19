@@ -1,57 +1,65 @@
 ---
-#restrict usage of ptrace to descendant processes
-- name: List /etc/sysctl.d/*.conf files
-  find:
-    paths:
-    - /etc/sysctl.d/
-    - /run/sysctl.d/
-    - /usr/local/lib/sysctl.d/
-    contains: ^[\s]*kernel.yama.ptrace_scope.*$
-    patterns: '*.conf'
-    file_type: any
-  register: find_sysctl_d
-  when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
-  tags:
-  - CCE-81058-0
-  - NIST-800-53-SC-7(10)
-  - disable_strategy
-  - low_complexity
-  - medium_disruption
-  - medium_severity
-  - reboot_required
-  - sysctl_kernel_yama_ptrace_scope
+- name: Restrict programs from dangerous execution patterns
+  block:
 
-- name: Comment out any occurrences of kernel.yama.ptrace_scope from config files
-  replace:
-    path: '{{ item.path }}'
-    regexp: ^[\s]*kernel.yama.ptrace_scope
-    replace: '#kernel.yama.ptrace_scope'
-  loop: '{{ find_sysctl_d.files }}'
-  when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
-  tags:
-  - CCE-81058-0
-  - NIST-800-53-SC-7(10)
-  - disable_strategy
-  - low_complexity
-  - medium_disruption
-  - medium_severity
-  - reboot_required
-  - sysctl_kernel_yama_ptrace_scope
+    #restrict usage of ptrace to descendant processes
+    - name: List /etc/sysctl.d/*.conf files
+      find:
+        paths:
+        - /etc/sysctl.d/
+        - /run/sysctl.d/
+        - /usr/local/lib/sysctl.d/
+        contains: ^[\s]*kernel.yama.ptrace_scope.*$
+        patterns: '*.conf'
+        file_type: any
+      register: find_sysctl_d
+      when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+      tags:
+      - CCE-81058-0
+      - NIST-800-53-SC-7(10)
+      - disable_strategy
+      - low_complexity
+      - medium_disruption
+      - medium_severity
+      - reboot_required
+      - sysctl_kernel_yama_ptrace_scope
 
-- name: Ensure sysctl kernel.yama.ptrace_scope is set to 1
-  sysctl:
-    name: kernel.yama.ptrace_scope
-    value: '1'
-    sysctl_file: /etc/sysctl.conf
-    state: present
-    reload: true
-  when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
-  tags:
-  - CCE-81058-0
-  - NIST-800-53-SC-7(10)
-  - disable_strategy
-  - low_complexity
-  - medium_disruption
-  - medium_severity
-  - reboot_required
-  - sysctl_kernel_yama_ptrace_scope
+    - name: Comment out any occurrences of kernel.yama.ptrace_scope from config files
+      replace:
+        path: '{{ item.path }}'
+        regexp: ^[\s]*kernel.yama.ptrace_scope
+        replace: '#kernel.yama.ptrace_scope'
+      loop: '{{ find_sysctl_d.files }}'
+      when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+      tags:
+      - CCE-81058-0
+      - NIST-800-53-SC-7(10)
+      - disable_strategy
+      - low_complexity
+      - medium_disruption
+      - medium_severity
+      - reboot_required
+      - sysctl_kernel_yama_ptrace_scope
+
+    - name: Ensure sysctl kernel.yama.ptrace_scope is set to 1
+      sysctl:
+        name: kernel.yama.ptrace_scope
+        value: '1'
+        sysctl_file: /etc/sysctl.conf
+        state: present
+        reload: true
+      when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+      tags:
+      - CCE-81058-0
+      - NIST-800-53-SC-7(10)
+      - disable_strategy
+      - low_complexity
+      - medium_disruption
+      - medium_severity
+      - reboot_required
+      - sysctl_kernel_yama_ptrace_scope
+
+  rescue:
+    - name: Rescate de tareas para remediacion
+      ansible.builtin.debug:
+        msg: "Remediaciones no se aplicaron porque el servidor posee una configuración personalizada en el archivo /etc/sysctl.conf."
