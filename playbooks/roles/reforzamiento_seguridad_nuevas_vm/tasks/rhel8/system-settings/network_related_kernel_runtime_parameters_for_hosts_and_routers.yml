@@ -1,875 +1,883 @@
 ---
-#disable_accepting_icmp_redirects_for_all_ipv4_interfaces
-- name: List /etc/sysctl.d/*.conf files
-  find:
-    paths:
-    - /etc/sysctl.d/
-    - /run/sysctl.d/
-    - /usr/local/lib/sysctl.d/
-    contains: ^[\s]*net.ipv4.conf.all.accept_redirects.*$
-    patterns: '*.conf'
-    file_type: any
-  register: find_sysctl_d
-  when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
-  tags:
-  - CCE-80917-8
-  - CJIS-5.10.1.1
-  - DISA-STIG-RHEL-08-040279
-  - NIST-800-171-3.1.20
-  - NIST-800-53-CM-6(a)
-  - NIST-800-53-CM-7(a)
-  - NIST-800-53-CM-7(b)
-  - NIST-800-53-SC-7(a)
-  - disable_strategy
-  - low_complexity
-  - medium_disruption
-  - medium_severity
-  - reboot_required
-  - sysctl_net_ipv4_conf_all_accept_redirects
+- name: Network related kernel runtime parameters for hosts and routers
+  block:
 
-- name: Comment out any occurrences of net.ipv4.conf.all.accept_redirects from config
-    files
-  replace:
-    path: '{{ item.path }}'
-    regexp: ^[\s]*net.ipv4.conf.all.accept_redirects
-    replace: '#net.ipv4.conf.all.accept_redirects'
-  loop: '{{ find_sysctl_d.files }}'
-  when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
-  tags:
-  - CCE-80917-8
-  - CJIS-5.10.1.1
-  - DISA-STIG-RHEL-08-040279
-  - NIST-800-171-3.1.20
-  - NIST-800-53-CM-6(a)
-  - NIST-800-53-CM-7(a)
-  - NIST-800-53-CM-7(b)
-  - NIST-800-53-SC-7(a)
-  - disable_strategy
-  - low_complexity
-  - medium_disruption
-  - medium_severity
-  - reboot_required
-  - sysctl_net_ipv4_conf_all_accept_redirects
-- name: XCCDF Value sysctl_net_ipv4_conf_all_accept_redirects_value # promote to variable
-  set_fact:
-    sysctl_net_ipv4_conf_all_accept_redirects_value: !!str 0
-  tags:
-    - always
+    #disable_accepting_icmp_redirects_for_all_ipv4_interfaces
+    - name: List /etc/sysctl.d/*.conf files
+      find:
+        paths:
+        - /etc/sysctl.d/
+        - /run/sysctl.d/
+        - /usr/local/lib/sysctl.d/
+        contains: ^[\s]*net.ipv4.conf.all.accept_redirects.*$
+        patterns: '*.conf'
+        file_type: any
+      register: find_sysctl_d
+      when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+      tags:
+      - CCE-80917-8
+      - CJIS-5.10.1.1
+      - DISA-STIG-RHEL-08-040279
+      - NIST-800-171-3.1.20
+      - NIST-800-53-CM-6(a)
+      - NIST-800-53-CM-7(a)
+      - NIST-800-53-CM-7(b)
+      - NIST-800-53-SC-7(a)
+      - disable_strategy
+      - low_complexity
+      - medium_disruption
+      - medium_severity
+      - reboot_required
+      - sysctl_net_ipv4_conf_all_accept_redirects
 
-- name: Ensure sysctl net.ipv4.conf.all.accept_redirects is set
-  sysctl:
-    name: net.ipv4.conf.all.accept_redirects
-    value: '{{ sysctl_net_ipv4_conf_all_accept_redirects_value }}'
-    sysctl_file: /etc/sysctl.conf
-    state: present
-    reload: true
-  when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
-  tags:
-  - CCE-80917-8
-  - CJIS-5.10.1.1
-  - DISA-STIG-RHEL-08-040279
-  - NIST-800-171-3.1.20
-  - NIST-800-53-CM-6(a)
-  - NIST-800-53-CM-7(a)
-  - NIST-800-53-CM-7(b)
-  - NIST-800-53-SC-7(a)
-  - disable_strategy
-  - low_complexity
-  - medium_disruption
-  - medium_severity
-  - reboot_required
-  - sysctl_net_ipv4_conf_all_accept_redirects
+    - name: Comment out any occurrences of net.ipv4.conf.all.accept_redirects from config
+        files
+      replace:
+        path: '{{ item.path }}'
+        regexp: ^[\s]*net.ipv4.conf.all.accept_redirects
+        replace: '#net.ipv4.conf.all.accept_redirects'
+      loop: '{{ find_sysctl_d.files }}'
+      when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+      tags:
+      - CCE-80917-8
+      - CJIS-5.10.1.1
+      - DISA-STIG-RHEL-08-040279
+      - NIST-800-171-3.1.20
+      - NIST-800-53-CM-6(a)
+      - NIST-800-53-CM-7(a)
+      - NIST-800-53-CM-7(b)
+      - NIST-800-53-SC-7(a)
+      - disable_strategy
+      - low_complexity
+      - medium_disruption
+      - medium_severity
+      - reboot_required
+      - sysctl_net_ipv4_conf_all_accept_redirects
+    - name: XCCDF Value sysctl_net_ipv4_conf_all_accept_redirects_value # promote to variable
+      set_fact:
+        sysctl_net_ipv4_conf_all_accept_redirects_value: !!str 0
+      tags:
+        - always
 
-#enable_kernel_parameter_to_log_martian_packets_on_all_ipv4_interfaces
-- name: List /etc/sysctl.d/*.conf files
-  find:
-    paths:
-    - /etc/sysctl.d/
-    - /run/sysctl.d/
-    - /usr/local/lib/sysctl.d/
-    contains: ^[\s]*net.ipv4.conf.all.log_martians.*$
-    patterns: '*.conf'
-    file_type: any
-  register: find_sysctl_d
-  when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
-  tags:
-  - CCE-81018-4
-  - NIST-800-171-3.1.20
-  - NIST-800-53-CM-7(a)
-  - NIST-800-53-CM-7(b)
-  - NIST-800-53-SC-5(3)(a)
-  - disable_strategy
-  - low_complexity
-  - medium_disruption
-  - reboot_required
-  - sysctl_net_ipv4_conf_all_log_martians
-  - unknown_severity
+    - name: Ensure sysctl net.ipv4.conf.all.accept_redirects is set
+      sysctl:
+        name: net.ipv4.conf.all.accept_redirects
+        value: '{{ sysctl_net_ipv4_conf_all_accept_redirects_value }}'
+        sysctl_file: /etc/sysctl.conf
+        state: present
+        reload: true
+      when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+      tags:
+      - CCE-80917-8
+      - CJIS-5.10.1.1
+      - DISA-STIG-RHEL-08-040279
+      - NIST-800-171-3.1.20
+      - NIST-800-53-CM-6(a)
+      - NIST-800-53-CM-7(a)
+      - NIST-800-53-CM-7(b)
+      - NIST-800-53-SC-7(a)
+      - disable_strategy
+      - low_complexity
+      - medium_disruption
+      - medium_severity
+      - reboot_required
+      - sysctl_net_ipv4_conf_all_accept_redirects
 
-- name: Comment out any occurrences of net.ipv4.conf.all.log_martians from config
-    files
-  replace:
-    path: '{{ item.path }}'
-    regexp: ^[\s]*net.ipv4.conf.all.log_martians
-    replace: '#net.ipv4.conf.all.log_martians'
-  loop: '{{ find_sysctl_d.files }}'
-  when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
-  tags:
-  - CCE-81018-4
-  - NIST-800-171-3.1.20
-  - NIST-800-53-CM-7(a)
-  - NIST-800-53-CM-7(b)
-  - NIST-800-53-SC-5(3)(a)
-  - disable_strategy
-  - low_complexity
-  - medium_disruption
-  - reboot_required
-  - sysctl_net_ipv4_conf_all_log_martians
-  - unknown_severity
-- name: XCCDF Value sysctl_net_ipv4_conf_all_log_martians_value # promote to variable
-  set_fact:
-    sysctl_net_ipv4_conf_all_log_martians_value: !!str 1
-  tags:
-    - always
+    #enable_kernel_parameter_to_log_martian_packets_on_all_ipv4_interfaces
+    - name: List /etc/sysctl.d/*.conf files
+      find:
+        paths:
+        - /etc/sysctl.d/
+        - /run/sysctl.d/
+        - /usr/local/lib/sysctl.d/
+        contains: ^[\s]*net.ipv4.conf.all.log_martians.*$
+        patterns: '*.conf'
+        file_type: any
+      register: find_sysctl_d
+      when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+      tags:
+      - CCE-81018-4
+      - NIST-800-171-3.1.20
+      - NIST-800-53-CM-7(a)
+      - NIST-800-53-CM-7(b)
+      - NIST-800-53-SC-5(3)(a)
+      - disable_strategy
+      - low_complexity
+      - medium_disruption
+      - reboot_required
+      - sysctl_net_ipv4_conf_all_log_martians
+      - unknown_severity
 
-- name: Ensure sysctl net.ipv4.conf.all.log_martians is set
-  sysctl:
-    name: net.ipv4.conf.all.log_martians
-    value: '{{ sysctl_net_ipv4_conf_all_log_martians_value }}'
-    sysctl_file: /etc/sysctl.conf
-    state: present
-    reload: true
-  when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
-  tags:
-  - CCE-81018-4
-  - NIST-800-171-3.1.20
-  - NIST-800-53-CM-7(a)
-  - NIST-800-53-CM-7(b)
-  - NIST-800-53-SC-5(3)(a)
-  - disable_strategy
-  - low_complexity
-  - medium_disruption
-  - reboot_required
-  - sysctl_net_ipv4_conf_all_log_martians
-  - unknown_severity
+    - name: Comment out any occurrences of net.ipv4.conf.all.log_martians from config
+        files
+      replace:
+        path: '{{ item.path }}'
+        regexp: ^[\s]*net.ipv4.conf.all.log_martians
+        replace: '#net.ipv4.conf.all.log_martians'
+      loop: '{{ find_sysctl_d.files }}'
+      when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+      tags:
+      - CCE-81018-4
+      - NIST-800-171-3.1.20
+      - NIST-800-53-CM-7(a)
+      - NIST-800-53-CM-7(b)
+      - NIST-800-53-SC-5(3)(a)
+      - disable_strategy
+      - low_complexity
+      - medium_disruption
+      - reboot_required
+      - sysctl_net_ipv4_conf_all_log_martians
+      - unknown_severity
+    - name: XCCDF Value sysctl_net_ipv4_conf_all_log_martians_value # promote to variable
+      set_fact:
+        sysctl_net_ipv4_conf_all_log_martians_value: !!str 1
+      tags:
+        - always
 
-#disable_kernel_parameter_for_accepting_secure_icmp_redirects_on_all_ipv4_interfaces
-- name: List /etc/sysctl.d/*.conf files
-  find:
-    paths:
-    - /etc/sysctl.d/
-    - /run/sysctl.d/
-    - /usr/local/lib/sysctl.d/
-    contains: ^[\s]*net.ipv4.conf.all.secure_redirects.*$
-    patterns: '*.conf'
-    file_type: any
-  register: find_sysctl_d
-  when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
-  tags:
-  - CCE-81016-8
-  - NIST-800-171-3.1.20
-  - NIST-800-53-CM-6(a)
-  - NIST-800-53-CM-7(a)
-  - NIST-800-53-CM-7(b)
-  - NIST-800-53-SC-7(a)
-  - PCI-DSS-Req-1.4.3
-  - PCI-DSSv4-1.4.3
-  - disable_strategy
-  - low_complexity
-  - medium_disruption
-  - medium_severity
-  - reboot_required
-  - sysctl_net_ipv4_conf_all_secure_redirects
+    - name: Ensure sysctl net.ipv4.conf.all.log_martians is set
+      sysctl:
+        name: net.ipv4.conf.all.log_martians
+        value: '{{ sysctl_net_ipv4_conf_all_log_martians_value }}'
+        sysctl_file: /etc/sysctl.conf
+        state: present
+        reload: true
+      when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+      tags:
+      - CCE-81018-4
+      - NIST-800-171-3.1.20
+      - NIST-800-53-CM-7(a)
+      - NIST-800-53-CM-7(b)
+      - NIST-800-53-SC-5(3)(a)
+      - disable_strategy
+      - low_complexity
+      - medium_disruption
+      - reboot_required
+      - sysctl_net_ipv4_conf_all_log_martians
+      - unknown_severity
 
-- name: Comment out any occurrences of net.ipv4.conf.all.secure_redirects from config
-    files
-  replace:
-    path: '{{ item.path }}'
-    regexp: ^[\s]*net.ipv4.conf.all.secure_redirects
-    replace: '#net.ipv4.conf.all.secure_redirects'
-  loop: '{{ find_sysctl_d.files }}'
-  when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
-  tags:
-  - CCE-81016-8
-  - NIST-800-171-3.1.20
-  - NIST-800-53-CM-6(a)
-  - NIST-800-53-CM-7(a)
-  - NIST-800-53-CM-7(b)
-  - NIST-800-53-SC-7(a)
-  - PCI-DSS-Req-1.4.3
-  - PCI-DSSv4-1.4.3
-  - disable_strategy
-  - low_complexity
-  - medium_disruption
-  - medium_severity
-  - reboot_required
-  - sysctl_net_ipv4_conf_all_secure_redirects
-- name: XCCDF Value sysctl_net_ipv4_conf_all_secure_redirects_value # promote to variable
-  set_fact:
-    sysctl_net_ipv4_conf_all_secure_redirects_value: !!str 0
-  tags:
-    - always
+    #disable_kernel_parameter_for_accepting_secure_icmp_redirects_on_all_ipv4_interfaces
+    - name: List /etc/sysctl.d/*.conf files
+      find:
+        paths:
+        - /etc/sysctl.d/
+        - /run/sysctl.d/
+        - /usr/local/lib/sysctl.d/
+        contains: ^[\s]*net.ipv4.conf.all.secure_redirects.*$
+        patterns: '*.conf'
+        file_type: any
+      register: find_sysctl_d
+      when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+      tags:
+      - CCE-81016-8
+      - NIST-800-171-3.1.20
+      - NIST-800-53-CM-6(a)
+      - NIST-800-53-CM-7(a)
+      - NIST-800-53-CM-7(b)
+      - NIST-800-53-SC-7(a)
+      - PCI-DSS-Req-1.4.3
+      - PCI-DSSv4-1.4.3
+      - disable_strategy
+      - low_complexity
+      - medium_disruption
+      - medium_severity
+      - reboot_required
+      - sysctl_net_ipv4_conf_all_secure_redirects
 
-- name: Ensure sysctl net.ipv4.conf.all.secure_redirects is set
-  sysctl:
-    name: net.ipv4.conf.all.secure_redirects
-    value: '{{ sysctl_net_ipv4_conf_all_secure_redirects_value }}'
-    sysctl_file: /etc/sysctl.conf
-    state: present
-    reload: true
-  when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
-  tags:
-  - CCE-81016-8
-  - NIST-800-171-3.1.20
-  - NIST-800-53-CM-6(a)
-  - NIST-800-53-CM-7(a)
-  - NIST-800-53-CM-7(b)
-  - NIST-800-53-SC-7(a)
-  - PCI-DSS-Req-1.4.3
-  - PCI-DSSv4-1.4.3
-  - disable_strategy
-  - low_complexity
-  - medium_disruption
-  - medium_severity
-  - reboot_required
-  - sysctl_net_ipv4_conf_all_secure_redirects
+    - name: Comment out any occurrences of net.ipv4.conf.all.secure_redirects from config
+        files
+      replace:
+        path: '{{ item.path }}'
+        regexp: ^[\s]*net.ipv4.conf.all.secure_redirects
+        replace: '#net.ipv4.conf.all.secure_redirects'
+      loop: '{{ find_sysctl_d.files }}'
+      when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+      tags:
+      - CCE-81016-8
+      - NIST-800-171-3.1.20
+      - NIST-800-53-CM-6(a)
+      - NIST-800-53-CM-7(a)
+      - NIST-800-53-CM-7(b)
+      - NIST-800-53-SC-7(a)
+      - PCI-DSS-Req-1.4.3
+      - PCI-DSSv4-1.4.3
+      - disable_strategy
+      - low_complexity
+      - medium_disruption
+      - medium_severity
+      - reboot_required
+      - sysctl_net_ipv4_conf_all_secure_redirects
+    - name: XCCDF Value sysctl_net_ipv4_conf_all_secure_redirects_value # promote to variable
+      set_fact:
+        sysctl_net_ipv4_conf_all_secure_redirects_value: !!str 0
+      tags:
+        - always
 
-#disable_kernel_parameter_for_accepting_icmp_redirects_by_default_on_ipv4_interfaces
-- name: List /etc/sysctl.d/*.conf files
-  find:
-    paths:
-    - /etc/sysctl.d/
-    - /run/sysctl.d/
-    - /usr/local/lib/sysctl.d/
-    contains: ^[\s]*net.ipv4.conf.default.accept_redirects.*$
-    patterns: '*.conf'
-    file_type: any
-  register: find_sysctl_d
-  when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
-  tags:
-  - CCE-80919-4
-  - CJIS-5.10.1.1
-  - DISA-STIG-RHEL-08-040209
-  - NIST-800-171-3.1.20
-  - NIST-800-53-CM-6(a)
-  - NIST-800-53-CM-7(a)
-  - NIST-800-53-CM-7(b)
-  - NIST-800-53-SC-7(a)
-  - PCI-DSS-Req-1.4.3
-  - PCI-DSSv4-1.4.3
-  - disable_strategy
-  - low_complexity
-  - medium_disruption
-  - medium_severity
-  - reboot_required
-  - sysctl_net_ipv4_conf_default_accept_redirects
+    - name: Ensure sysctl net.ipv4.conf.all.secure_redirects is set
+      sysctl:
+        name: net.ipv4.conf.all.secure_redirects
+        value: '{{ sysctl_net_ipv4_conf_all_secure_redirects_value }}'
+        sysctl_file: /etc/sysctl.conf
+        state: present
+        reload: true
+      when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+      tags:
+      - CCE-81016-8
+      - NIST-800-171-3.1.20
+      - NIST-800-53-CM-6(a)
+      - NIST-800-53-CM-7(a)
+      - NIST-800-53-CM-7(b)
+      - NIST-800-53-SC-7(a)
+      - PCI-DSS-Req-1.4.3
+      - PCI-DSSv4-1.4.3
+      - disable_strategy
+      - low_complexity
+      - medium_disruption
+      - medium_severity
+      - reboot_required
+      - sysctl_net_ipv4_conf_all_secure_redirects
 
-- name: Comment out any occurrences of net.ipv4.conf.default.accept_redirects from
-    config files
-  replace:
-    path: '{{ item.path }}'
-    regexp: ^[\s]*net.ipv4.conf.default.accept_redirects
-    replace: '#net.ipv4.conf.default.accept_redirects'
-  loop: '{{ find_sysctl_d.files }}'
-  when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
-  tags:
-  - CCE-80919-4
-  - CJIS-5.10.1.1
-  - DISA-STIG-RHEL-08-040209
-  - NIST-800-171-3.1.20
-  - NIST-800-53-CM-6(a)
-  - NIST-800-53-CM-7(a)
-  - NIST-800-53-CM-7(b)
-  - NIST-800-53-SC-7(a)
-  - PCI-DSS-Req-1.4.3
-  - PCI-DSSv4-1.4.3
-  - disable_strategy
-  - low_complexity
-  - medium_disruption
-  - medium_severity
-  - reboot_required
-  - sysctl_net_ipv4_conf_default_accept_redirects
-- name: XCCDF Value sysctl_net_ipv4_conf_default_accept_redirects_value # promote to variable
-  set_fact:
-    sysctl_net_ipv4_conf_default_accept_redirects_value: !!str 0
-  tags:
-    - always
+    #disable_kernel_parameter_for_accepting_icmp_redirects_by_default_on_ipv4_interfaces
+    - name: List /etc/sysctl.d/*.conf files
+      find:
+        paths:
+        - /etc/sysctl.d/
+        - /run/sysctl.d/
+        - /usr/local/lib/sysctl.d/
+        contains: ^[\s]*net.ipv4.conf.default.accept_redirects.*$
+        patterns: '*.conf'
+        file_type: any
+      register: find_sysctl_d
+      when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+      tags:
+      - CCE-80919-4
+      - CJIS-5.10.1.1
+      - DISA-STIG-RHEL-08-040209
+      - NIST-800-171-3.1.20
+      - NIST-800-53-CM-6(a)
+      - NIST-800-53-CM-7(a)
+      - NIST-800-53-CM-7(b)
+      - NIST-800-53-SC-7(a)
+      - PCI-DSS-Req-1.4.3
+      - PCI-DSSv4-1.4.3
+      - disable_strategy
+      - low_complexity
+      - medium_disruption
+      - medium_severity
+      - reboot_required
+      - sysctl_net_ipv4_conf_default_accept_redirects
 
-- name: Ensure sysctl net.ipv4.conf.default.accept_redirects is set
-  sysctl:
-    name: net.ipv4.conf.default.accept_redirects
-    value: '{{ sysctl_net_ipv4_conf_default_accept_redirects_value }}'
-    sysctl_file: /etc/sysctl.conf
-    state: present
-    reload: true
-  when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
-  tags:
-  - CCE-80919-4
-  - CJIS-5.10.1.1
-  - DISA-STIG-RHEL-08-040209
-  - NIST-800-171-3.1.20
-  - NIST-800-53-CM-6(a)
-  - NIST-800-53-CM-7(a)
-  - NIST-800-53-CM-7(b)
-  - NIST-800-53-SC-7(a)
-  - PCI-DSS-Req-1.4.3
-  - PCI-DSSv4-1.4.3
-  - disable_strategy
-  - low_complexity
-  - medium_disruption
-  - medium_severity
-  - reboot_required
-  - sysctl_net_ipv4_conf_default_accept_redirects
+    - name: Comment out any occurrences of net.ipv4.conf.default.accept_redirects from
+        config files
+      replace:
+        path: '{{ item.path }}'
+        regexp: ^[\s]*net.ipv4.conf.default.accept_redirects
+        replace: '#net.ipv4.conf.default.accept_redirects'
+      loop: '{{ find_sysctl_d.files }}'
+      when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+      tags:
+      - CCE-80919-4
+      - CJIS-5.10.1.1
+      - DISA-STIG-RHEL-08-040209
+      - NIST-800-171-3.1.20
+      - NIST-800-53-CM-6(a)
+      - NIST-800-53-CM-7(a)
+      - NIST-800-53-CM-7(b)
+      - NIST-800-53-SC-7(a)
+      - PCI-DSS-Req-1.4.3
+      - PCI-DSSv4-1.4.3
+      - disable_strategy
+      - low_complexity
+      - medium_disruption
+      - medium_severity
+      - reboot_required
+      - sysctl_net_ipv4_conf_default_accept_redirects
+    - name: XCCDF Value sysctl_net_ipv4_conf_default_accept_redirects_value # promote to variable
+      set_fact:
+        sysctl_net_ipv4_conf_default_accept_redirects_value: !!str 0
+      tags:
+        - always
 
-#disable_kernel_parameter_for_accepting_source-routed_packets_on_ipv4_interfaces_by_default
-- name: List /etc/sysctl.d/*.conf files
-  find:
-    paths:
-    - /etc/sysctl.d/
-    - /run/sysctl.d/
-    - /usr/local/lib/sysctl.d/
-    contains: ^[\s]*net.ipv4.conf.default.accept_source_route.*$
-    patterns: '*.conf'
-    file_type: any
-  register: find_sysctl_d
-  when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
-  tags:
-  - CCE-80920-2
-  - CJIS-5.10.1.1
-  - DISA-STIG-RHEL-08-040249
-  - NIST-800-171-3.1.20
-  - NIST-800-53-CM-7(a)
-  - NIST-800-53-CM-7(b)
-  - NIST-800-53-SC-5
-  - NIST-800-53-SC-7(a)
-  - disable_strategy
-  - low_complexity
-  - medium_disruption
-  - medium_severity
-  - reboot_required
-  - sysctl_net_ipv4_conf_default_accept_source_route
+    - name: Ensure sysctl net.ipv4.conf.default.accept_redirects is set
+      sysctl:
+        name: net.ipv4.conf.default.accept_redirects
+        value: '{{ sysctl_net_ipv4_conf_default_accept_redirects_value }}'
+        sysctl_file: /etc/sysctl.conf
+        state: present
+        reload: true
+      when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+      tags:
+      - CCE-80919-4
+      - CJIS-5.10.1.1
+      - DISA-STIG-RHEL-08-040209
+      - NIST-800-171-3.1.20
+      - NIST-800-53-CM-6(a)
+      - NIST-800-53-CM-7(a)
+      - NIST-800-53-CM-7(b)
+      - NIST-800-53-SC-7(a)
+      - PCI-DSS-Req-1.4.3
+      - PCI-DSSv4-1.4.3
+      - disable_strategy
+      - low_complexity
+      - medium_disruption
+      - medium_severity
+      - reboot_required
+      - sysctl_net_ipv4_conf_default_accept_redirects
 
-- name: Comment out any occurrences of net.ipv4.conf.default.accept_source_route from
-    config files
-  replace:
-    path: '{{ item.path }}'
-    regexp: ^[\s]*net.ipv4.conf.default.accept_source_route
-    replace: '#net.ipv4.conf.default.accept_source_route'
-  loop: '{{ find_sysctl_d.files }}'
-  when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
-  tags:
-  - CCE-80920-2
-  - CJIS-5.10.1.1
-  - DISA-STIG-RHEL-08-040249
-  - NIST-800-171-3.1.20
-  - NIST-800-53-CM-7(a)
-  - NIST-800-53-CM-7(b)
-  - NIST-800-53-SC-5
-  - NIST-800-53-SC-7(a)
-  - disable_strategy
-  - low_complexity
-  - medium_disruption
-  - medium_severity
-  - reboot_required
-  - sysctl_net_ipv4_conf_default_accept_source_route
-- name: XCCDF Value sysctl_net_ipv4_conf_default_accept_source_route_value # promote to variable
-  set_fact:
-    sysctl_net_ipv4_conf_default_accept_source_route_value: !!str 0
-  tags:
-    - always
+    #disable_kernel_parameter_for_accepting_source-routed_packets_on_ipv4_interfaces_by_default
+    - name: List /etc/sysctl.d/*.conf files
+      find:
+        paths:
+        - /etc/sysctl.d/
+        - /run/sysctl.d/
+        - /usr/local/lib/sysctl.d/
+        contains: ^[\s]*net.ipv4.conf.default.accept_source_route.*$
+        patterns: '*.conf'
+        file_type: any
+      register: find_sysctl_d
+      when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+      tags:
+      - CCE-80920-2
+      - CJIS-5.10.1.1
+      - DISA-STIG-RHEL-08-040249
+      - NIST-800-171-3.1.20
+      - NIST-800-53-CM-7(a)
+      - NIST-800-53-CM-7(b)
+      - NIST-800-53-SC-5
+      - NIST-800-53-SC-7(a)
+      - disable_strategy
+      - low_complexity
+      - medium_disruption
+      - medium_severity
+      - reboot_required
+      - sysctl_net_ipv4_conf_default_accept_source_route
 
-- name: Ensure sysctl net.ipv4.conf.default.accept_source_route is set
-  sysctl:
-    name: net.ipv4.conf.default.accept_source_route
-    value: '{{ sysctl_net_ipv4_conf_default_accept_source_route_value }}'
-    sysctl_file: /etc/sysctl.conf
-    state: present
-    reload: true
-  when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
-  tags:
-  - CCE-80920-2
-  - CJIS-5.10.1.1
-  - DISA-STIG-RHEL-08-040249
-  - NIST-800-171-3.1.20
-  - NIST-800-53-CM-7(a)
-  - NIST-800-53-CM-7(b)
-  - NIST-800-53-SC-5
-  - NIST-800-53-SC-7(a)
-  - disable_strategy
-  - low_complexity
-  - medium_disruption
-  - medium_severity
-  - reboot_required
-  - sysctl_net_ipv4_conf_default_accept_source_route
+    - name: Comment out any occurrences of net.ipv4.conf.default.accept_source_route from
+        config files
+      replace:
+        path: '{{ item.path }}'
+        regexp: ^[\s]*net.ipv4.conf.default.accept_source_route
+        replace: '#net.ipv4.conf.default.accept_source_route'
+      loop: '{{ find_sysctl_d.files }}'
+      when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+      tags:
+      - CCE-80920-2
+      - CJIS-5.10.1.1
+      - DISA-STIG-RHEL-08-040249
+      - NIST-800-171-3.1.20
+      - NIST-800-53-CM-7(a)
+      - NIST-800-53-CM-7(b)
+      - NIST-800-53-SC-5
+      - NIST-800-53-SC-7(a)
+      - disable_strategy
+      - low_complexity
+      - medium_disruption
+      - medium_severity
+      - reboot_required
+      - sysctl_net_ipv4_conf_default_accept_source_route
+    - name: XCCDF Value sysctl_net_ipv4_conf_default_accept_source_route_value # promote to variable
+      set_fact:
+        sysctl_net_ipv4_conf_default_accept_source_route_value: !!str 0
+      tags:
+        - always
 
-#enable_kernel_paremeter_to_log_martian_packets_on_all_ipv4_interfaces_by_default
-- name: List /etc/sysctl.d/*.conf files
-  find:
-    paths:
-    - /etc/sysctl.d/
-    - /run/sysctl.d/
-    - /usr/local/lib/sysctl.d/
-    contains: ^[\s]*net.ipv4.conf.default.log_martians.*$
-    patterns: '*.conf'
-    file_type: any
-  register: find_sysctl_d
-  when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
-  tags:
-  - CCE-81020-0
-  - NIST-800-171-3.1.20
-  - NIST-800-53-CM-7(a)
-  - NIST-800-53-CM-7(b)
-  - NIST-800-53-SC-5(3)(a)
-  - disable_strategy
-  - low_complexity
-  - medium_disruption
-  - reboot_required
-  - sysctl_net_ipv4_conf_default_log_martians
-  - unknown_severity
+    - name: Ensure sysctl net.ipv4.conf.default.accept_source_route is set
+      sysctl:
+        name: net.ipv4.conf.default.accept_source_route
+        value: '{{ sysctl_net_ipv4_conf_default_accept_source_route_value }}'
+        sysctl_file: /etc/sysctl.conf
+        state: present
+        reload: true
+      when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+      tags:
+      - CCE-80920-2
+      - CJIS-5.10.1.1
+      - DISA-STIG-RHEL-08-040249
+      - NIST-800-171-3.1.20
+      - NIST-800-53-CM-7(a)
+      - NIST-800-53-CM-7(b)
+      - NIST-800-53-SC-5
+      - NIST-800-53-SC-7(a)
+      - disable_strategy
+      - low_complexity
+      - medium_disruption
+      - medium_severity
+      - reboot_required
+      - sysctl_net_ipv4_conf_default_accept_source_route
 
-- name: Comment out any occurrences of net.ipv4.conf.default.log_martians from config
-    files
-  replace:
-    path: '{{ item.path }}'
-    regexp: ^[\s]*net.ipv4.conf.default.log_martians
-    replace: '#net.ipv4.conf.default.log_martians'
-  loop: '{{ find_sysctl_d.files }}'
-  when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
-  tags:
-  - CCE-81020-0
-  - NIST-800-171-3.1.20
-  - NIST-800-53-CM-7(a)
-  - NIST-800-53-CM-7(b)
-  - NIST-800-53-SC-5(3)(a)
-  - disable_strategy
-  - low_complexity
-  - medium_disruption
-  - reboot_required
-  - sysctl_net_ipv4_conf_default_log_martians
-  - unknown_severity
-- name: XCCDF Value sysctl_net_ipv4_conf_default_log_martians_value # promote to variable
-  set_fact:
-    sysctl_net_ipv4_conf_default_log_martians_value: !!str 1
-  tags:
-    - always
+    #enable_kernel_paremeter_to_log_martian_packets_on_all_ipv4_interfaces_by_default
+    - name: List /etc/sysctl.d/*.conf files
+      find:
+        paths:
+        - /etc/sysctl.d/
+        - /run/sysctl.d/
+        - /usr/local/lib/sysctl.d/
+        contains: ^[\s]*net.ipv4.conf.default.log_martians.*$
+        patterns: '*.conf'
+        file_type: any
+      register: find_sysctl_d
+      when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+      tags:
+      - CCE-81020-0
+      - NIST-800-171-3.1.20
+      - NIST-800-53-CM-7(a)
+      - NIST-800-53-CM-7(b)
+      - NIST-800-53-SC-5(3)(a)
+      - disable_strategy
+      - low_complexity
+      - medium_disruption
+      - reboot_required
+      - sysctl_net_ipv4_conf_default_log_martians
+      - unknown_severity
 
-- name: Ensure sysctl net.ipv4.conf.default.log_martians is set
-  sysctl:
-    name: net.ipv4.conf.default.log_martians
-    value: '{{ sysctl_net_ipv4_conf_default_log_martians_value }}'
-    sysctl_file: /etc/sysctl.conf
-    state: present
-    reload: true
-  when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
-  tags:
-  - CCE-81020-0
-  - NIST-800-171-3.1.20
-  - NIST-800-53-CM-7(a)
-  - NIST-800-53-CM-7(b)
-  - NIST-800-53-SC-5(3)(a)
-  - disable_strategy
-  - low_complexity
-  - medium_disruption
-  - reboot_required
-  - sysctl_net_ipv4_conf_default_log_martians
-  - unknown_severity
+    - name: Comment out any occurrences of net.ipv4.conf.default.log_martians from config
+        files
+      replace:
+        path: '{{ item.path }}'
+        regexp: ^[\s]*net.ipv4.conf.default.log_martians
+        replace: '#net.ipv4.conf.default.log_martians'
+      loop: '{{ find_sysctl_d.files }}'
+      when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+      tags:
+      - CCE-81020-0
+      - NIST-800-171-3.1.20
+      - NIST-800-53-CM-7(a)
+      - NIST-800-53-CM-7(b)
+      - NIST-800-53-SC-5(3)(a)
+      - disable_strategy
+      - low_complexity
+      - medium_disruption
+      - reboot_required
+      - sysctl_net_ipv4_conf_default_log_martians
+      - unknown_severity
+    - name: XCCDF Value sysctl_net_ipv4_conf_default_log_martians_value # promote to variable
+      set_fact:
+        sysctl_net_ipv4_conf_default_log_martians_value: !!str 1
+      tags:
+        - always
 
-#enable_kernel_parameter_to_use_reverse_path_filtering_on_all_ipv4_interfaces_by_default
-- name: List /etc/sysctl.d/*.conf files
-  find:
-    paths:
-    - /etc/sysctl.d/
-    - /run/sysctl.d/
-    - /usr/local/lib/sysctl.d/
-    contains: ^[\s]*net.ipv4.conf.default.rp_filter.*$
-    patterns: '*.conf'
-    file_type: any
-  register: find_sysctl_d
-  when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
-  tags:
-  - CCE-81022-6
-  - NIST-800-171-3.1.20
-  - NIST-800-53-CM-6(a)
-  - NIST-800-53-CM-7(a)
-  - NIST-800-53-CM-7(b)
-  - NIST-800-53-SC-7(a)
-  - disable_strategy
-  - low_complexity
-  - medium_disruption
-  - medium_severity
-  - reboot_required
-  - sysctl_net_ipv4_conf_default_rp_filter
+    - name: Ensure sysctl net.ipv4.conf.default.log_martians is set
+      sysctl:
+        name: net.ipv4.conf.default.log_martians
+        value: '{{ sysctl_net_ipv4_conf_default_log_martians_value }}'
+        sysctl_file: /etc/sysctl.conf
+        state: present
+        reload: true
+      when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+      tags:
+      - CCE-81020-0
+      - NIST-800-171-3.1.20
+      - NIST-800-53-CM-7(a)
+      - NIST-800-53-CM-7(b)
+      - NIST-800-53-SC-5(3)(a)
+      - disable_strategy
+      - low_complexity
+      - medium_disruption
+      - reboot_required
+      - sysctl_net_ipv4_conf_default_log_martians
+      - unknown_severity
 
-- name: Comment out any occurrences of net.ipv4.conf.default.rp_filter from config
-    files
-  replace:
-    path: '{{ item.path }}'
-    regexp: ^[\s]*net.ipv4.conf.default.rp_filter
-    replace: '#net.ipv4.conf.default.rp_filter'
-  loop: '{{ find_sysctl_d.files }}'
-  when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
-  tags:
-  - CCE-81022-6
-  - NIST-800-171-3.1.20
-  - NIST-800-53-CM-6(a)
-  - NIST-800-53-CM-7(a)
-  - NIST-800-53-CM-7(b)
-  - NIST-800-53-SC-7(a)
-  - disable_strategy
-  - low_complexity
-  - medium_disruption
-  - medium_severity
-  - reboot_required
-  - sysctl_net_ipv4_conf_default_rp_filter
-- name: XCCDF Value sysctl_net_ipv4_conf_default_rp_filter_value # promote to variable
-  set_fact:
-    sysctl_net_ipv4_conf_default_rp_filter_value: !!str 1
-  tags:
-    - always
+    #enable_kernel_parameter_to_use_reverse_path_filtering_on_all_ipv4_interfaces_by_default
+    - name: List /etc/sysctl.d/*.conf files
+      find:
+        paths:
+        - /etc/sysctl.d/
+        - /run/sysctl.d/
+        - /usr/local/lib/sysctl.d/
+        contains: ^[\s]*net.ipv4.conf.default.rp_filter.*$
+        patterns: '*.conf'
+        file_type: any
+      register: find_sysctl_d
+      when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+      tags:
+      - CCE-81022-6
+      - NIST-800-171-3.1.20
+      - NIST-800-53-CM-6(a)
+      - NIST-800-53-CM-7(a)
+      - NIST-800-53-CM-7(b)
+      - NIST-800-53-SC-7(a)
+      - disable_strategy
+      - low_complexity
+      - medium_disruption
+      - medium_severity
+      - reboot_required
+      - sysctl_net_ipv4_conf_default_rp_filter
 
-- name: Ensure sysctl net.ipv4.conf.default.rp_filter is set
-  sysctl:
-    name: net.ipv4.conf.default.rp_filter
-    value: '{{ sysctl_net_ipv4_conf_default_rp_filter_value }}'
-    sysctl_file: /etc/sysctl.conf
-    state: present
-    reload: true
-  when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
-  tags:
-  - CCE-81022-6
-  - NIST-800-171-3.1.20
-  - NIST-800-53-CM-6(a)
-  - NIST-800-53-CM-7(a)
-  - NIST-800-53-CM-7(b)
-  - NIST-800-53-SC-7(a)
-  - disable_strategy
-  - low_complexity
-  - medium_disruption
-  - medium_severity
-  - reboot_required
-  - sysctl_net_ipv4_conf_default_rp_filter
+    - name: Comment out any occurrences of net.ipv4.conf.default.rp_filter from config
+        files
+      replace:
+        path: '{{ item.path }}'
+        regexp: ^[\s]*net.ipv4.conf.default.rp_filter
+        replace: '#net.ipv4.conf.default.rp_filter'
+      loop: '{{ find_sysctl_d.files }}'
+      when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+      tags:
+      - CCE-81022-6
+      - NIST-800-171-3.1.20
+      - NIST-800-53-CM-6(a)
+      - NIST-800-53-CM-7(a)
+      - NIST-800-53-CM-7(b)
+      - NIST-800-53-SC-7(a)
+      - disable_strategy
+      - low_complexity
+      - medium_disruption
+      - medium_severity
+      - reboot_required
+      - sysctl_net_ipv4_conf_default_rp_filter
+    - name: XCCDF Value sysctl_net_ipv4_conf_default_rp_filter_value # promote to variable
+      set_fact:
+        sysctl_net_ipv4_conf_default_rp_filter_value: !!str 1
+      tags:
+        - always
 
-#configure_kernel_parameter_for_accepting_secure_redirects_by_default
-- name: List /etc/sysctl.d/*.conf files
-  find:
-    paths:
-    - /etc/sysctl.d/
-    - /run/sysctl.d/
-    - /usr/local/lib/sysctl.d/
-    contains: ^[\s]*net.ipv4.conf.default.secure_redirects.*$
-    patterns: '*.conf'
-    file_type: any
-  register: find_sysctl_d
-  when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
-  tags:
-  - CCE-81017-6
-  - NIST-800-171-3.1.20
-  - NIST-800-53-CM-7(a)
-  - NIST-800-53-CM-7(b)
-  - NIST-800-53-SC-5
-  - NIST-800-53-SC-7(a)
-  - disable_strategy
-  - low_complexity
-  - medium_disruption
-  - medium_severity
-  - reboot_required
-  - sysctl_net_ipv4_conf_default_secure_redirects
+    - name: Ensure sysctl net.ipv4.conf.default.rp_filter is set
+      sysctl:
+        name: net.ipv4.conf.default.rp_filter
+        value: '{{ sysctl_net_ipv4_conf_default_rp_filter_value }}'
+        sysctl_file: /etc/sysctl.conf
+        state: present
+        reload: true
+      when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+      tags:
+      - CCE-81022-6
+      - NIST-800-171-3.1.20
+      - NIST-800-53-CM-6(a)
+      - NIST-800-53-CM-7(a)
+      - NIST-800-53-CM-7(b)
+      - NIST-800-53-SC-7(a)
+      - disable_strategy
+      - low_complexity
+      - medium_disruption
+      - medium_severity
+      - reboot_required
+      - sysctl_net_ipv4_conf_default_rp_filter
 
-- name: Comment out any occurrences of net.ipv4.conf.default.secure_redirects from
-    config files
-  replace:
-    path: '{{ item.path }}'
-    regexp: ^[\s]*net.ipv4.conf.default.secure_redirects
-    replace: '#net.ipv4.conf.default.secure_redirects'
-  loop: '{{ find_sysctl_d.files }}'
-  when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
-  tags:
-  - CCE-81017-6
-  - NIST-800-171-3.1.20
-  - NIST-800-53-CM-7(a)
-  - NIST-800-53-CM-7(b)
-  - NIST-800-53-SC-5
-  - NIST-800-53-SC-7(a)
-  - disable_strategy
-  - low_complexity
-  - medium_disruption
-  - medium_severity
-  - reboot_required
-  - sysctl_net_ipv4_conf_default_secure_redirects
-- name: XCCDF Value sysctl_net_ipv4_conf_default_secure_redirects_value # promote to variable
-  set_fact:
-    sysctl_net_ipv4_conf_default_secure_redirects_value: !!str 0
-  tags:
-    - always
+    #configure_kernel_parameter_for_accepting_secure_redirects_by_default
+    - name: List /etc/sysctl.d/*.conf files
+      find:
+        paths:
+        - /etc/sysctl.d/
+        - /run/sysctl.d/
+        - /usr/local/lib/sysctl.d/
+        contains: ^[\s]*net.ipv4.conf.default.secure_redirects.*$
+        patterns: '*.conf'
+        file_type: any
+      register: find_sysctl_d
+      when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+      tags:
+      - CCE-81017-6
+      - NIST-800-171-3.1.20
+      - NIST-800-53-CM-7(a)
+      - NIST-800-53-CM-7(b)
+      - NIST-800-53-SC-5
+      - NIST-800-53-SC-7(a)
+      - disable_strategy
+      - low_complexity
+      - medium_disruption
+      - medium_severity
+      - reboot_required
+      - sysctl_net_ipv4_conf_default_secure_redirects
 
-- name: Ensure sysctl net.ipv4.conf.default.secure_redirects is set
-  sysctl:
-    name: net.ipv4.conf.default.secure_redirects
-    value: '{{ sysctl_net_ipv4_conf_default_secure_redirects_value }}'
-    sysctl_file: /etc/sysctl.conf
-    state: present
-    reload: true
-  when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
-  tags:
-  - CCE-81017-6
-  - NIST-800-171-3.1.20
-  - NIST-800-53-CM-7(a)
-  - NIST-800-53-CM-7(b)
-  - NIST-800-53-SC-5
-  - NIST-800-53-SC-7(a)
-  - disable_strategy
-  - low_complexity
-  - medium_disruption
-  - medium_severity
-  - reboot_required
-  - sysctl_net_ipv4_conf_default_secure_redirects
+    - name: Comment out any occurrences of net.ipv4.conf.default.secure_redirects from
+        config files
+      replace:
+        path: '{{ item.path }}'
+        regexp: ^[\s]*net.ipv4.conf.default.secure_redirects
+        replace: '#net.ipv4.conf.default.secure_redirects'
+      loop: '{{ find_sysctl_d.files }}'
+      when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+      tags:
+      - CCE-81017-6
+      - NIST-800-171-3.1.20
+      - NIST-800-53-CM-7(a)
+      - NIST-800-53-CM-7(b)
+      - NIST-800-53-SC-5
+      - NIST-800-53-SC-7(a)
+      - disable_strategy
+      - low_complexity
+      - medium_disruption
+      - medium_severity
+      - reboot_required
+      - sysctl_net_ipv4_conf_default_secure_redirects
+    - name: XCCDF Value sysctl_net_ipv4_conf_default_secure_redirects_value # promote to variable
+      set_fact:
+        sysctl_net_ipv4_conf_default_secure_redirects_value: !!str 0
+      tags:
+        - always
 
-#enable_kernel_parameter_to_ignore_icmp_broadcast_echo_requests_on_ipv4_interfaces
-- name: List /etc/sysctl.d/*.conf files
-  find:
-    paths:
-    - /etc/sysctl.d/
-    - /run/sysctl.d/
-    - /usr/local/lib/sysctl.d/
-    contains: ^[\s]*net.ipv4.icmp_echo_ignore_broadcasts.*$
-    patterns: '*.conf'
-    file_type: any
-  register: find_sysctl_d
-  when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
-  tags:
-  - CCE-80922-8
-  - CJIS-5.10.1.1
-  - DISA-STIG-RHEL-08-040230
-  - NIST-800-171-3.1.20
-  - NIST-800-53-CM-7(a)
-  - NIST-800-53-CM-7(b)
-  - NIST-800-53-SC-5
-  - PCI-DSS-Req-1.4.3
-  - PCI-DSSv4-1.4.2
-  - disable_strategy
-  - low_complexity
-  - medium_disruption
-  - medium_severity
-  - reboot_required
-  - sysctl_net_ipv4_icmp_echo_ignore_broadcasts
+    - name: Ensure sysctl net.ipv4.conf.default.secure_redirects is set
+      sysctl:
+        name: net.ipv4.conf.default.secure_redirects
+        value: '{{ sysctl_net_ipv4_conf_default_secure_redirects_value }}'
+        sysctl_file: /etc/sysctl.conf
+        state: present
+        reload: true
+      when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+      tags:
+      - CCE-81017-6
+      - NIST-800-171-3.1.20
+      - NIST-800-53-CM-7(a)
+      - NIST-800-53-CM-7(b)
+      - NIST-800-53-SC-5
+      - NIST-800-53-SC-7(a)
+      - disable_strategy
+      - low_complexity
+      - medium_disruption
+      - medium_severity
+      - reboot_required
+      - sysctl_net_ipv4_conf_default_secure_redirects
 
-- name: Comment out any occurrences of net.ipv4.icmp_echo_ignore_broadcasts from config
-    files
-  replace:
-    path: '{{ item.path }}'
-    regexp: ^[\s]*net.ipv4.icmp_echo_ignore_broadcasts
-    replace: '#net.ipv4.icmp_echo_ignore_broadcasts'
-  loop: '{{ find_sysctl_d.files }}'
-  when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
-  tags:
-  - CCE-80922-8
-  - CJIS-5.10.1.1
-  - DISA-STIG-RHEL-08-040230
-  - NIST-800-171-3.1.20
-  - NIST-800-53-CM-7(a)
-  - NIST-800-53-CM-7(b)
-  - NIST-800-53-SC-5
-  - PCI-DSS-Req-1.4.3
-  - PCI-DSSv4-1.4.2
-  - disable_strategy
-  - low_complexity
-  - medium_disruption
-  - medium_severity
-  - reboot_required
-  - sysctl_net_ipv4_icmp_echo_ignore_broadcasts
-- name: XCCDF Value sysctl_net_ipv4_icmp_echo_ignore_broadcasts_value # promote to variable
-  set_fact:
-    sysctl_net_ipv4_icmp_echo_ignore_broadcasts_value: !!str 1
-  tags:
-    - always
+    #enable_kernel_parameter_to_ignore_icmp_broadcast_echo_requests_on_ipv4_interfaces
+    - name: List /etc/sysctl.d/*.conf files
+      find:
+        paths:
+        - /etc/sysctl.d/
+        - /run/sysctl.d/
+        - /usr/local/lib/sysctl.d/
+        contains: ^[\s]*net.ipv4.icmp_echo_ignore_broadcasts.*$
+        patterns: '*.conf'
+        file_type: any
+      register: find_sysctl_d
+      when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+      tags:
+      - CCE-80922-8
+      - CJIS-5.10.1.1
+      - DISA-STIG-RHEL-08-040230
+      - NIST-800-171-3.1.20
+      - NIST-800-53-CM-7(a)
+      - NIST-800-53-CM-7(b)
+      - NIST-800-53-SC-5
+      - PCI-DSS-Req-1.4.3
+      - PCI-DSSv4-1.4.2
+      - disable_strategy
+      - low_complexity
+      - medium_disruption
+      - medium_severity
+      - reboot_required
+      - sysctl_net_ipv4_icmp_echo_ignore_broadcasts
 
-- name: Ensure sysctl net.ipv4.icmp_echo_ignore_broadcasts is set
-  sysctl:
-    name: net.ipv4.icmp_echo_ignore_broadcasts
-    value: '{{ sysctl_net_ipv4_icmp_echo_ignore_broadcasts_value }}'
-    sysctl_file: /etc/sysctl.conf
-    state: present
-    reload: true
-  when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
-  tags:
-  - CCE-80922-8
-  - CJIS-5.10.1.1
-  - DISA-STIG-RHEL-08-040230
-  - NIST-800-171-3.1.20
-  - NIST-800-53-CM-7(a)
-  - NIST-800-53-CM-7(b)
-  - NIST-800-53-SC-5
-  - PCI-DSS-Req-1.4.3
-  - PCI-DSSv4-1.4.2
-  - disable_strategy
-  - low_complexity
-  - medium_disruption
-  - medium_severity
-  - reboot_required
-  - sysctl_net_ipv4_icmp_echo_ignore_broadcasts
+    - name: Comment out any occurrences of net.ipv4.icmp_echo_ignore_broadcasts from config
+        files
+      replace:
+        path: '{{ item.path }}'
+        regexp: ^[\s]*net.ipv4.icmp_echo_ignore_broadcasts
+        replace: '#net.ipv4.icmp_echo_ignore_broadcasts'
+      loop: '{{ find_sysctl_d.files }}'
+      when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+      tags:
+      - CCE-80922-8
+      - CJIS-5.10.1.1
+      - DISA-STIG-RHEL-08-040230
+      - NIST-800-171-3.1.20
+      - NIST-800-53-CM-7(a)
+      - NIST-800-53-CM-7(b)
+      - NIST-800-53-SC-5
+      - PCI-DSS-Req-1.4.3
+      - PCI-DSSv4-1.4.2
+      - disable_strategy
+      - low_complexity
+      - medium_disruption
+      - medium_severity
+      - reboot_required
+      - sysctl_net_ipv4_icmp_echo_ignore_broadcasts
+    - name: XCCDF Value sysctl_net_ipv4_icmp_echo_ignore_broadcasts_value # promote to variable
+      set_fact:
+        sysctl_net_ipv4_icmp_echo_ignore_broadcasts_value: !!str 1
+      tags:
+        - always
 
-#enable_kernel_parameter_to_ignore_bogus_icmp_error_responses_on_ipv4_interfaces
-- name: List /etc/sysctl.d/*.conf files
-  find:
-    paths:
-    - /etc/sysctl.d/
-    - /run/sysctl.d/
-    - /usr/local/lib/sysctl.d/
-    contains: ^[\s]*net.ipv4.icmp_ignore_bogus_error_responses.*$
-    patterns: '*.conf'
-    file_type: any
-  register: find_sysctl_d
-  when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
-  tags:
-  - CCE-81023-4
-  - NIST-800-171-3.1.20
-  - NIST-800-53-CM-7(a)
-  - NIST-800-53-CM-7(b)
-  - NIST-800-53-SC-5
-  - PCI-DSS-Req-1.4.3
-  - PCI-DSSv4-1.4.2
-  - disable_strategy
-  - low_complexity
-  - medium_disruption
-  - reboot_required
-  - sysctl_net_ipv4_icmp_ignore_bogus_error_responses
-  - unknown_severity
+    - name: Ensure sysctl net.ipv4.icmp_echo_ignore_broadcasts is set
+      sysctl:
+        name: net.ipv4.icmp_echo_ignore_broadcasts
+        value: '{{ sysctl_net_ipv4_icmp_echo_ignore_broadcasts_value }}'
+        sysctl_file: /etc/sysctl.conf
+        state: present
+        reload: true
+      when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+      tags:
+      - CCE-80922-8
+      - CJIS-5.10.1.1
+      - DISA-STIG-RHEL-08-040230
+      - NIST-800-171-3.1.20
+      - NIST-800-53-CM-7(a)
+      - NIST-800-53-CM-7(b)
+      - NIST-800-53-SC-5
+      - PCI-DSS-Req-1.4.3
+      - PCI-DSSv4-1.4.2
+      - disable_strategy
+      - low_complexity
+      - medium_disruption
+      - medium_severity
+      - reboot_required
+      - sysctl_net_ipv4_icmp_echo_ignore_broadcasts
 
-- name: Comment out any occurrences of net.ipv4.icmp_ignore_bogus_error_responses
-    from config files
-  replace:
-    path: '{{ item.path }}'
-    regexp: ^[\s]*net.ipv4.icmp_ignore_bogus_error_responses
-    replace: '#net.ipv4.icmp_ignore_bogus_error_responses'
-  loop: '{{ find_sysctl_d.files }}'
-  when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
-  tags:
-  - CCE-81023-4
-  - NIST-800-171-3.1.20
-  - NIST-800-53-CM-7(a)
-  - NIST-800-53-CM-7(b)
-  - NIST-800-53-SC-5
-  - PCI-DSS-Req-1.4.3
-  - PCI-DSSv4-1.4.2
-  - disable_strategy
-  - low_complexity
-  - medium_disruption
-  - reboot_required
-  - sysctl_net_ipv4_icmp_ignore_bogus_error_responses
-  - unknown_severity
-- name: XCCDF Value sysctl_net_ipv4_icmp_ignore_bogus_error_responses_value # promote to variable
-  set_fact:
-    sysctl_net_ipv4_icmp_ignore_bogus_error_responses_value: !!str 1
-  tags:
-    - always
+    #enable_kernel_parameter_to_ignore_bogus_icmp_error_responses_on_ipv4_interfaces
+    - name: List /etc/sysctl.d/*.conf files
+      find:
+        paths:
+        - /etc/sysctl.d/
+        - /run/sysctl.d/
+        - /usr/local/lib/sysctl.d/
+        contains: ^[\s]*net.ipv4.icmp_ignore_bogus_error_responses.*$
+        patterns: '*.conf'
+        file_type: any
+      register: find_sysctl_d
+      when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+      tags:
+      - CCE-81023-4
+      - NIST-800-171-3.1.20
+      - NIST-800-53-CM-7(a)
+      - NIST-800-53-CM-7(b)
+      - NIST-800-53-SC-5
+      - PCI-DSS-Req-1.4.3
+      - PCI-DSSv4-1.4.2
+      - disable_strategy
+      - low_complexity
+      - medium_disruption
+      - reboot_required
+      - sysctl_net_ipv4_icmp_ignore_bogus_error_responses
+      - unknown_severity
 
-- name: Ensure sysctl net.ipv4.icmp_ignore_bogus_error_responses is set
-  sysctl:
-    name: net.ipv4.icmp_ignore_bogus_error_responses
-    value: '{{ sysctl_net_ipv4_icmp_ignore_bogus_error_responses_value }}'
-    sysctl_file: /etc/sysctl.conf
-    state: present
-    reload: true
-  when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
-  tags:
-  - CCE-81023-4
-  - NIST-800-171-3.1.20
-  - NIST-800-53-CM-7(a)
-  - NIST-800-53-CM-7(b)
-  - NIST-800-53-SC-5
-  - PCI-DSS-Req-1.4.3
-  - PCI-DSSv4-1.4.2
-  - disable_strategy
-  - low_complexity
-  - medium_disruption
-  - reboot_required
-  - sysctl_net_ipv4_icmp_ignore_bogus_error_responses
-  - unknown_severity
+    - name: Comment out any occurrences of net.ipv4.icmp_ignore_bogus_error_responses
+        from config files
+      replace:
+        path: '{{ item.path }}'
+        regexp: ^[\s]*net.ipv4.icmp_ignore_bogus_error_responses
+        replace: '#net.ipv4.icmp_ignore_bogus_error_responses'
+      loop: '{{ find_sysctl_d.files }}'
+      when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+      tags:
+      - CCE-81023-4
+      - NIST-800-171-3.1.20
+      - NIST-800-53-CM-7(a)
+      - NIST-800-53-CM-7(b)
+      - NIST-800-53-SC-5
+      - PCI-DSS-Req-1.4.3
+      - PCI-DSSv4-1.4.2
+      - disable_strategy
+      - low_complexity
+      - medium_disruption
+      - reboot_required
+      - sysctl_net_ipv4_icmp_ignore_bogus_error_responses
+      - unknown_severity
+    - name: XCCDF Value sysctl_net_ipv4_icmp_ignore_bogus_error_responses_value # promote to variable
+      set_fact:
+        sysctl_net_ipv4_icmp_ignore_bogus_error_responses_value: !!str 1
+      tags:
+        - always
 
-#enable_kernel_parameter_to_use_tcp_syncookies_on_network_interfaces
-- name: List /etc/sysctl.d/*.conf files
-  find:
-    paths:
-    - /etc/sysctl.d/
-    - /run/sysctl.d/
-    - /usr/local/lib/sysctl.d/
-    contains: ^[\s]*net.ipv4.tcp_syncookies.*$
-    patterns: '*.conf'
-    file_type: any
-  register: find_sysctl_d
-  when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
-  tags:
-  - CCE-80923-6
-  - CJIS-5.10.1.1
-  - NIST-800-171-3.1.20
-  - NIST-800-53-CM-6(a)
-  - NIST-800-53-CM-7(a)
-  - NIST-800-53-CM-7(b)
-  - NIST-800-53-SC-5(1)
-  - NIST-800-53-SC-5(2)
-  - NIST-800-53-SC-5(3)(a)
-  - PCI-DSS-Req-1.4.1
-  - PCI-DSSv4-1.4.3
-  - disable_strategy
-  - low_complexity
-  - medium_disruption
-  - medium_severity
-  - reboot_required
-  - sysctl_net_ipv4_tcp_syncookies
+    - name: Ensure sysctl net.ipv4.icmp_ignore_bogus_error_responses is set
+      sysctl:
+        name: net.ipv4.icmp_ignore_bogus_error_responses
+        value: '{{ sysctl_net_ipv4_icmp_ignore_bogus_error_responses_value }}'
+        sysctl_file: /etc/sysctl.conf
+        state: present
+        reload: true
+      when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+      tags:
+      - CCE-81023-4
+      - NIST-800-171-3.1.20
+      - NIST-800-53-CM-7(a)
+      - NIST-800-53-CM-7(b)
+      - NIST-800-53-SC-5
+      - PCI-DSS-Req-1.4.3
+      - PCI-DSSv4-1.4.2
+      - disable_strategy
+      - low_complexity
+      - medium_disruption
+      - reboot_required
+      - sysctl_net_ipv4_icmp_ignore_bogus_error_responses
+      - unknown_severity
 
-- name: Comment out any occurrences of net.ipv4.tcp_syncookies from config files
-  replace:
-    path: '{{ item.path }}'
-    regexp: ^[\s]*net.ipv4.tcp_syncookies
-    replace: '#net.ipv4.tcp_syncookies'
-  loop: '{{ find_sysctl_d.files }}'
-  when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
-  tags:
-  - CCE-80923-6
-  - CJIS-5.10.1.1
-  - NIST-800-171-3.1.20
-  - NIST-800-53-CM-6(a)
-  - NIST-800-53-CM-7(a)
-  - NIST-800-53-CM-7(b)
-  - NIST-800-53-SC-5(1)
-  - NIST-800-53-SC-5(2)
-  - NIST-800-53-SC-5(3)(a)
-  - PCI-DSS-Req-1.4.1
-  - PCI-DSSv4-1.4.3
-  - disable_strategy
-  - low_complexity
-  - medium_disruption
-  - medium_severity
-  - reboot_required
-  - sysctl_net_ipv4_tcp_syncookies
-- name: XCCDF Value sysctl_net_ipv4_tcp_syncookies_value # promote to variable
-  set_fact:
-    sysctl_net_ipv4_tcp_syncookies_value: !!str 1
-  tags:
-    - always
+    #enable_kernel_parameter_to_use_tcp_syncookies_on_network_interfaces
+    - name: List /etc/sysctl.d/*.conf files
+      find:
+        paths:
+        - /etc/sysctl.d/
+        - /run/sysctl.d/
+        - /usr/local/lib/sysctl.d/
+        contains: ^[\s]*net.ipv4.tcp_syncookies.*$
+        patterns: '*.conf'
+        file_type: any
+      register: find_sysctl_d
+      when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+      tags:
+      - CCE-80923-6
+      - CJIS-5.10.1.1
+      - NIST-800-171-3.1.20
+      - NIST-800-53-CM-6(a)
+      - NIST-800-53-CM-7(a)
+      - NIST-800-53-CM-7(b)
+      - NIST-800-53-SC-5(1)
+      - NIST-800-53-SC-5(2)
+      - NIST-800-53-SC-5(3)(a)
+      - PCI-DSS-Req-1.4.1
+      - PCI-DSSv4-1.4.3
+      - disable_strategy
+      - low_complexity
+      - medium_disruption
+      - medium_severity
+      - reboot_required
+      - sysctl_net_ipv4_tcp_syncookies
 
-- name: Ensure sysctl net.ipv4.tcp_syncookies is set
-  sysctl:
-    name: net.ipv4.tcp_syncookies
-    value: '{{ sysctl_net_ipv4_tcp_syncookies_value }}'
-    sysctl_file: /etc/sysctl.conf
-    state: present
-    reload: true
-  when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
-  tags:
-  - CCE-80923-6
-  - CJIS-5.10.1.1
-  - NIST-800-171-3.1.20
-  - NIST-800-53-CM-6(a)
-  - NIST-800-53-CM-7(a)
-  - NIST-800-53-CM-7(b)
-  - NIST-800-53-SC-5(1)
-  - NIST-800-53-SC-5(2)
-  - NIST-800-53-SC-5(3)(a)
-  - PCI-DSS-Req-1.4.1
-  - PCI-DSSv4-1.4.3
-  - disable_strategy
-  - low_complexity
-  - medium_disruption
-  - medium_severity
-  - reboot_required
-  - sysctl_net_ipv4_tcp_syncookies
+    - name: Comment out any occurrences of net.ipv4.tcp_syncookies from config files
+      replace:
+        path: '{{ item.path }}'
+        regexp: ^[\s]*net.ipv4.tcp_syncookies
+        replace: '#net.ipv4.tcp_syncookies'
+      loop: '{{ find_sysctl_d.files }}'
+      when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+      tags:
+      - CCE-80923-6
+      - CJIS-5.10.1.1
+      - NIST-800-171-3.1.20
+      - NIST-800-53-CM-6(a)
+      - NIST-800-53-CM-7(a)
+      - NIST-800-53-CM-7(b)
+      - NIST-800-53-SC-5(1)
+      - NIST-800-53-SC-5(2)
+      - NIST-800-53-SC-5(3)(a)
+      - PCI-DSS-Req-1.4.1
+      - PCI-DSSv4-1.4.3
+      - disable_strategy
+      - low_complexity
+      - medium_disruption
+      - medium_severity
+      - reboot_required
+      - sysctl_net_ipv4_tcp_syncookies
+    - name: XCCDF Value sysctl_net_ipv4_tcp_syncookies_value # promote to variable
+      set_fact:
+        sysctl_net_ipv4_tcp_syncookies_value: !!str 1
+      tags:
+        - always
+
+    - name: Ensure sysctl net.ipv4.tcp_syncookies is set
+      sysctl:
+        name: net.ipv4.tcp_syncookies
+        value: '{{ sysctl_net_ipv4_tcp_syncookies_value }}'
+        sysctl_file: /etc/sysctl.conf
+        state: present
+        reload: true
+      when: ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+      tags:
+      - CCE-80923-6
+      - CJIS-5.10.1.1
+      - NIST-800-171-3.1.20
+      - NIST-800-53-CM-6(a)
+      - NIST-800-53-CM-7(a)
+      - NIST-800-53-CM-7(b)
+      - NIST-800-53-SC-5(1)
+      - NIST-800-53-SC-5(2)
+      - NIST-800-53-SC-5(3)(a)
+      - PCI-DSS-Req-1.4.1
+      - PCI-DSSv4-1.4.3
+      - disable_strategy
+      - low_complexity
+      - medium_disruption
+      - medium_severity
+      - reboot_required
+      - sysctl_net_ipv4_tcp_syncookies
+
+  rescue:
+    - name: Rescate de tareas para remediacion
+      ansible.builtin.debug:
+        msg: "Remediaciones no se aplicaron porque el servidor posee una configuración personalizada en el archivo /etc/sysctl.conf."
