@@ -1,16 +1,16 @@
 ---
-# # Analisis y extracion de datos antes de generar mitigacion de vulnerabilidades
-# - name: Generacion de informe de vulnerabilidades RHEL9 Pre-mitigacion de vulnerabilidades
-#   ansible.builtin.include_tasks: rhel9/rhel9_crear_archivo_reporte_pre.yml
+# Analisis y extracion de datos antes de generar mitigacion de vulnerabilidades
+- name: Generacion de informe de vulnerabilidades RHEL9 Pre-mitigacion de vulnerabilidades
+  ansible.builtin.include_tasks: rhel9/rhel9_crear_archivo_reporte_pre.yml
 
-# - name: Validacion de las vulnerabilidades encontradas previo a mitigacion en RHEL9
-#   ansible.builtin.include_tasks: rhel9/rhel9_validacion_vulnerabilidades_pre.yml
+- name: Validacion de las vulnerabilidades encontradas previo a mitigacion en RHEL9
+  ansible.builtin.include_tasks: rhel9/rhel9_validacion_vulnerabilidades_pre.yml
 
-# - name: Recoleccion de datos previo a mitigacion en RHEL9
-#   ansible.builtin.include_tasks: rhel9/rhel9_recoleccion_vulnerabilidades_pre.yml
+- name: Recoleccion de datos previo a mitigacion en RHEL9
+  ansible.builtin.include_tasks: rhel9/rhel9_recoleccion_vulnerabilidades_pre.yml
 
-# - name: Copia de archivo a Entorno de Ejecucion local de informe previo a mitigacion en RHEL9
-#   ansible.builtin.include_tasks: rhel9/rhel9_guardar_archivo_ee_pre.yml
+- name: Copia de archivo a Entorno de Ejecucion local de informe previo a mitigacion en RHEL9
+  ansible.builtin.include_tasks: rhel9/rhel9_guardar_archivo_ee_pre.yml
 
 # Aplicacion de mitigacion de vulnerabilidades y reinicio de sistema operativo
 - name: Aplicacion remediaciones de vulnerabilidades de RHEL9
@@ -20,15 +20,15 @@
 - name: Generacion de informe de vulnerabilidades RHEL9 posterior mitigacion de vulnerabilidades
   ansible.builtin.include_tasks: rhel9/rhel9_crear_archivo_reporte_post.yml
 
-# - name: Validacion de las vulnerabilidades encontradas post mitigacion en RHEL9
-#   ansible.builtin.include_tasks: rhel9/rhel9_validacion_vulnerabilidades_post.yml
+- name: Validacion de las vulnerabilidades encontradas post mitigacion en RHEL9
+  ansible.builtin.include_tasks: rhel9/rhel9_validacion_vulnerabilidades_post.yml
 
-# - name: Recoleccion de datos post mitigacion en RHEL9
-#   ansible.builtin.include_tasks: rhel9/rhel9_recoleccion_vulnerabilidades_post.yml
+- name: Recoleccion de datos post mitigacion en RHEL9
+  ansible.builtin.include_tasks: rhel9/rhel9_recoleccion_vulnerabilidades_post.yml
 
-# - name: Copia de archivo a Entorno de Ejecucion local de informe previo a mitigacion en RHEL9
-#   ansible.builtin.include_tasks: rhel9/rhel9_guardar_archivo_ee_post.yml
+- name: Copia de archivo a Entorno de Ejecucion local de informe previo a mitigacion en RHEL9
+  ansible.builtin.include_tasks: rhel9/rhel9_guardar_archivo_ee_post.yml
 
-# # rebooteo de sistema operativo
-# - name: Reboot de sistema operativo RHEL9
-#   ansible.builtin.include_tasks: rhel9/rhel9_reboot_sistema.yml
+# rebooteo de sistema operativo
+- name: Reboot de sistema operativo RHEL9
+  ansible.builtin.include_tasks: rhel9/rhel9_reboot_sistema.yml

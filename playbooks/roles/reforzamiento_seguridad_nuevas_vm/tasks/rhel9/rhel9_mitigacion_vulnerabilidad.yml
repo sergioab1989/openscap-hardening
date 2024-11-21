@@ -2,5 +2,5 @@
 - name: Inclusion de tareas de configuracion de sistema
   ansible.builtin.include_tasks: system_settings/main.yml
 
-# - name: Inclusion de tareas de configuracion de servicios 
-#   ansible.builtin.include_tasks: services/main.yml
+- name: Inclusion de tareas de configuracion de servicios 
+  ansible.builtin.include_tasks: services/main.yml
