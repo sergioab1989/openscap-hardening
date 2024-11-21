@@ -1,9 +1,9 @@
 ---
-# - name: Clonando repositorio Bitbucket en entorno de ejecucion 
-#   hosts: localhost
-#   gather_facts: true 
-#   roles:
-#     - bitbucket_login
+- name: Clonando repositorio Bitbucket en entorno de ejecucion 
+  hosts: localhost
+  gather_facts: true 
+  roles:
+    - bitbucket_login
 
 - name: Escaneo y remediacion de vulnerabilidades para nuevas VM
   hosts: all
@@ -11,8 +11,8 @@
   roles:
     - reforzamiento_seguridad_nuevas_vm
 
-# - name: subiendo cambio y cerrando conexion a bitbucket
-#   hosts: localhost
-#   gather_facts: false   
-#   roles:
-#     - bitbucket_cerrar
+- name: subiendo cambio y cerrando conexion a bitbucket
+  hosts: localhost
+  gather_facts: false   
+  roles:
+    - bitbucket_cerrar
